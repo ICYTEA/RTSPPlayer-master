@@ -1,0 +1,50 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="com.example.rtspplayer.MainActivity" 
+    >
+    <SurfaceView 
+    android:id="@+id/videoview"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    />
+        
+<RelativeLayout 
+    android:id="@+id/rl_maincenter_title"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@drawable/top_bar_bg" >
+
+    <ImageButton
+        android:id="@+id/ib_menu_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"
+        android:background="@drawable/left_menu_button" />
+
+    <TextView
+        android:id="@+id/tv_load_course"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="广西交通科学研究院"
+        android:textColor="@android:color/white"
+        android:textSize="18dp" />
+
+    <ImageButton
+        android:id="@+id/ib_menu_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/right_menu_button" />
+
+</RelativeLayout>
+
+
+</FrameLayout>

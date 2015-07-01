@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/transparent_gray"
+    android:clickable="true"
+    android:onClick="onClickOverlayTips" 
+    android:id="@+id/player_overlay_tips">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:weightSum="4" >
+
+        <TextView
+            style="@style/TipsFontStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            android:text="提示信息："
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                style="@style/TipsFontStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableBottom="@drawable/ic_gesture_swipe_vertically"
+                android:gravity="center"
+                android:text="上下滑动" />
+
+        </LinearLayout>
+
+        <TextView
+            style="@style/TipsFontStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:drawableBottom="@drawable/ic_gesture_swipe_horizontally"
+            android:gravity="center"
+            android:text="左右滑动" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true" >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/player_tips_progress"
+            android:layout_alignParentRight="true"
+            android:id="@+id/relativeLayout">
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/player_tips_progress"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/transparent_gray"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" >
+
+            <ImageView
+                android:id="@+id/player_tips_lock"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/ic_lock" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/dots"
+                android:onClick="showAdvancedOptions" />
+
+        </RelativeLayout>
+
+        <TextView
+            style="@style/TipsFontStyle.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp"
+            android:text="设置"
+            android:id="@+id/textView2"
+            android:layout_above="@+id/textView3"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            style="@style/TipsFontStyle.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/player_tips_progress"
+            android:layout_marginTop="-6dp"
+            android:paddingLeft="5dp"
+            android:text="锁定屏幕"
+            android:id="@+id/textView3" />
+
+        <ImageView
+            android:id="@+id/player_tips_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_crop_circle"
+            android:layout_above="@+id/player_tips_record"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            style="@style/TipsFontStyle.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp"
+            android:text="截图"
+            android:id="@+id/textView"
+            android:layout_above="@+id/textView4"
+            android:layout_alignRight="@+id/player_tips_size"
+            android:layout_alignEnd="@+id/player_tips_size"
+            android:layout_marginBottom="45dp" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/player_tips_record"
+            android:background="@drawable/ic_audio_circle_normal"
+            android:layout_alignBottom="@+id/textView5"
+            android:layout_alignLeft="@+id/player_tips_size"
+            android:layout_alignStart="@+id/player_tips_size"
+            android:layout_marginBottom="6dp" />
+
+        <TextView
+            style="@style/TipsFontStyle.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp"
+            android:text="录像"
+            android:id="@+id/textView4"
+            android:layout_marginBottom="50dp"
+            android:layout_alignBottom="@+id/player_tips_record"
+            android:layout_alignRight="@+id/player_tips_size"
+            android:layout_alignEnd="@+id/player_tips_size" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/player_tips_more"
+            android:background="@drawable/ic_subtitle_circle_normal"
+            android:layout_below="@+id/textView4"
+            android:layout_alignLeft="@+id/player_tips_record"
+            android:layout_alignStart="@+id/player_tips_record" />
+
+        <TextView
+            style="@style/TipsFontStyle.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp"
+            android:text="更多"
+            android:id="@+id/textView5"
+            android:layout_above="@+id/textView2"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="40dp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

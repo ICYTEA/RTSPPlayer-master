@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/RTSPPlayer-master.iml" filepath="$PROJECT_DIR$/RTSPPlayer-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rTSPPlayer/rTSPPlayer.iml" filepath="$PROJECT_DIR$/rTSPPlayer/rTSPPlayer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/slidingMenu/slidingMenu.iml" filepath="$PROJECT_DIR$/slidingMenu/slidingMenu.iml" />
+    </modules>
+  </component>
+</project>

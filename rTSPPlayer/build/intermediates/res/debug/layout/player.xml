@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+     <FrameLayout
+            android:id="@+id/player_surface_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" >
+   			
+   			<SurfaceView
+        		android:id="@+id/player_surface"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content" 
+        		android:layout_gravity="center_horizontal|center_vertical" />
+   			
+    </FrameLayout>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true" >
+        
+        <include
+            android:id="@+id/player_overlay_tips"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/player_tips" />
+            
+        <ImageButton 
+            android:id="@+id/player_overlay_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/ic_pause_circle"
+            android:visibility="invisible"/> 
+         
+        <ImageView
+            android:id="@+id/player_overlay_loading"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/loading" />
+
+        <TextView
+            android:id="@+id/player_overlay_loading_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/player_overlay_loading"
+            android:layout_centerHorizontal="true"
+            android:textSize="20sp"
+            android:text="@string/please_wait" />
+    
+    	<LinearLayout
+            android:id="@+id/player_overlay_header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="top"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:visibility="invisible" >
+
+            <TextView
+                android:id="@+id/player_overlay_title"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="@string/title"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/player_overlay_battery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/player_overlay_systime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/player_overlay_record"
+            android:background="@drawable/ic_audio_circle_normal"
+            android:adjustViewBounds="true"
+            android:layout_above="@+id/player_overlay_more"
+            android:layout_alignLeft="@+id/player_overlay_size"
+            android:layout_alignStart="@+id/player_overlay_size" />
+
+        <ImageButton
+            android:id="@+id/player_overlay_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_crop_circle"
+            android:adjustViewBounds="true"
+            android:layout_above="@+id/player_overlay_record"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/player_overlay_more"
+            android:background="@drawable/ic_subtitle_circle_normal"
+            android:adjustViewBounds="true"
+            android:layout_marginBottom="42dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignLeft="@+id/player_overlay_record"
+            android:layout_alignStart="@+id/player_overlay_record"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+</FrameLayout><!-- From: file:/C:/Users/liangxing/AndroidStudioProjects/RTSPPlayer-master/RTSPPlayer-master/rTSPPlayer/src/main/res/layout/player.xml -->

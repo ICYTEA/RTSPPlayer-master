@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <com.example.slidingmenu.TreeListView xmlns:android="http://schemas.android.com/apk/res/android"
+		android:background="@color/white"
+		android:fadingEdgeLength="0.0sp" 
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:drawSelectorOnTop="false"
+		android:cacheColorHint="@color/white" 
+		android:divider="@drawable/divider_list"
+		android:dividerHeight="2.0dip" 
+		android:layout_weight="0.0"
+		android:fastScrollEnabled="true" 
+		android:scrollbars="none"	/>
