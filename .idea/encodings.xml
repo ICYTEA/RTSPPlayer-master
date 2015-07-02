@@ -10,5 +10,6 @@
     <file url="file://$PROJECT_DIR$/rTSPPlayer/src/main/java/com/example/slidingmenu/NodePullParse.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rTSPPlayer/src/main/java/com/example/slidingmenu/SampleListFragment.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rTSPPlayer/src/main/java/com/example/slidingmenu/TreeAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rTSPPlayer/src/main/java/com/example/slidingmenu/TreeListView.java" charset="UTF-8" />
   </component>
 </project>

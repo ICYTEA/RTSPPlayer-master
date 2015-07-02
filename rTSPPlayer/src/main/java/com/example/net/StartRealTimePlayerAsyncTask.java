@@ -75,7 +75,7 @@ public class StartRealTimePlayerAsyncTask extends AsyncTask<String, Integer, Str
 //		cameraCode = "45010200051320000045";
 		cameraCode = params[0];
 		Log.i(TAG, "cameraCode = "+cameraCode);
-		port = 30000;
+		port = 3000;
 		
 		soapObject.addProperty("cameraCode", cameraCode);
 //		soapObject.addProperty("cameraCode", "34020000001310000001");

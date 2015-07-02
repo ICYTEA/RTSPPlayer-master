@@ -123,6 +123,7 @@ public class MainActivity extends FragmentActivity {
 		if(!isWifiConnected(getApplicationContext())) {
 			Toast.makeText(getApplicationContext(),"请打开网络！", 500).show();
 		}
+
 	}
 	
     @Override

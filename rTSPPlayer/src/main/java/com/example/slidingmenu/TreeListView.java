@@ -51,7 +51,7 @@ public class TreeListView extends ListView {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Log.d("print", "±»µã»÷");
+				Log.d("print", "è¢«ç‚¹å‡»");
 				((TreeAdapter) parent.getAdapter()).ExpandOrCollapse(position);
 			}
 		});
@@ -61,17 +61,17 @@ public class TreeListView extends ListView {
 	/**
 	 * 
 	 * @param context
-	 *            ÏìÓ¦¼àÌıµÄÉÏÏÂÎÄ
+	 *            å“åº”ç›‘å¬çš„ä¸Šä¸‹æ–‡
 	 * @param root
-	 *            ÒÑ¾­¹ÒºÃÊ÷µÄ¸ù½Úµã
+	 *            å·²ç»æŒ‚å¥½æ ‘çš„æ ¹èŠ‚ç‚¹
 	 * @param hasCheckBox
-	 *            ÊÇ·ñÕû¸öÊ÷ÓĞ¸´Ñ¡¿ò
+	 *            æ˜¯å¦æ•´ä¸ªæ ‘æœ‰å¤é€‰æ¡†
 	 * @param tree_ex_id
-	 *            Õ¹¿ªiconid -1»áÊ¹ÓÃÄ¬ÈÏµÄ
+	 *            å±•å¼€iconid -1ä¼šä½¿ç”¨é»˜è®¤çš„
 	 * @param tree_ec_id
-	 *            ÊÕËõiconid -1»áÊ¹ÓÃÄ¬ÈÏµÄ
+	 *            æ”¶ç¼©iconid -1ä¼šä½¿ç”¨é»˜è®¤çš„
 	 * @param expandLevel
-	 *            ³õÊ¼Õ¹¿ªµÈ¼¶
+	 *            åˆå§‹å±•å¼€ç­‰çº§
 	 * 
 	 */
 	public List<Node> initNodRoot(List<NodeResource> res) {
@@ -82,12 +82,12 @@ public class TreeListView extends ListView {
 			NodeResource nr = res.get(i);
 			Node n = new Node(nr.name, nr.cameraId, nr.parentId, nr.curId,
 					nr.iconId, nr.port, nr.isSpeedDomeCamera);
-			nodemap.put(n.getCurId(), n);// Éú³ÉmapÊ÷
+			nodemap.put(n.getCurId(), n);// ç”Ÿæˆmapæ ‘
 		}
 		Set<String> set = nodemap.keySet();
 		Collection<Node> collections = nodemap.values();
 		Iterator<Node> iterator = collections.iterator();
-		while (iterator.hasNext()) {// Ìí¼ÓËùÓĞ¸ù½Úµãµ½rootÖĞ
+		while (iterator.hasNext()) {// æ·»åŠ æ‰€æœ‰æ ¹èŠ‚ç‚¹åˆ°rootä¸­
 			Node n = iterator.next();
 			if (!set.contains(n.getParentId()))
 				roots.add(n);
@@ -113,12 +113,12 @@ public class TreeListView extends ListView {
 			int tree_ex_id, int tree_ec_id, int expandLevel) {
 		ta = new TreeAdapter(mContext, root, mMenu);
 		
-		// ÉèÖÃÕ¹¿ªºÍÕÛµşÊ±Í¼±ê
+		// è®¾ç½®å±•å¼€å’ŒæŠ˜å æ—¶å›¾æ ‡
 		// ta.setCollapseAndExpandIcon(R.drawable.tree_ex, R.drawable.tree_ec);
 		int tree_ex_id_ = (tree_ex_id == -1) ? R.drawable.tree_ex : tree_ex_id;
 		int tree_ec_id_ = (tree_ec_id == -1) ? R.drawable.tree_ec : tree_ec_id;
 		ta.setCollapseAndExpandIcon(tree_ex_id_, tree_ec_id_);
-		// ÉèÖÃÄ¬ÈÏÕ¹¿ª¼¶±ğ
+		// è®¾ç½®é»˜è®¤å±•å¼€çº§åˆ«
 		ta.setExpandLevel(expandLevel);
 		this.setAdapter(ta);
 	}

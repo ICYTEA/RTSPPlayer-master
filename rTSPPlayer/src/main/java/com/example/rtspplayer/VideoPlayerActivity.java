@@ -131,6 +131,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 		//Set LibVLC
 		 try {
 	            mLibVLC = VLCInstance.getLibVlcInstance();
+
 	        } catch (LibVlcException e) {
 	            Log.i(TAG, "LibVLC initialisation failed");
 	            return;
