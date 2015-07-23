@@ -72,6 +72,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	private ImageButton mOverlayRecord;
 	private ImageButton mOverlayMore;
 	private boolean recording = false;
+	private boolean isPlaying = false;
 	private LibVLC mLibVLC;
 	
 	private Intent intent;
@@ -178,6 +179,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 			MRL = intent.getStringExtra("result");
 			cameraCode = intent.getStringExtra("cameraCode");
 			mLibVLC.playMRL(MRL);
+			isPlaying = true;
 			Log.i(TAG, "MRL = "+MRL);
 		}
 		Log.i(TAG, "on Resume");
@@ -661,8 +663,23 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 			@Override
 			public void onClick(View view) {
 				Toast.makeText(getApplicationContext(), "more listener", 1000).show();
+				if(isPlaying) {
+					mLibVLC.stop();
+					isPlaying = false;
+					playVideoRecorded();
+				}
+				else {
+					mLibVLC.playMRL(MRL);
+					isPlaying = true;
+				}
+
 			}
 		};
+
+		private void playVideoRecorded(){
+
+			mLibVLC.playMRL("rtsp://admin:12345@10.46.4.16/h264/ch1/main/av_stream");
+		}
 		/**
 		 * take a snapshot
 		 */

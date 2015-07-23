@@ -1,15 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/rTSPPlayer/src/main/java/com/example/net/NetControlAsyncTask.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rTSPPlayer/src/main/java/com/example/net/StartRealTimePlayerAsyncTask.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rTSPPlayer/src/main/java/com/example/net/StopRealTimePlayerAsyncTask.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rTSPPlayer/src/main/java/com/example/rtspplayer/MainActivity.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rTSPPlayer/src/main/java/com/example/rtspplayer/VideoPlayerActivity.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rTSPPlayer/src/main/java/com/example/slidingmenu/Node.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rTSPPlayer/src/main/java/com/example/slidingmenu/NodePullParse.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rTSPPlayer/src/main/java/com/example/slidingmenu/SampleListFragment.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rTSPPlayer/src/main/java/com/example/slidingmenu/TreeAdapter.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rTSPPlayer/src/main/java/com/example/slidingmenu/TreeListView.java" charset="UTF-8" />
-  </component>
-</project>
+<project version="4" />
