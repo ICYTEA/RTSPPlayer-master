@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -678,6 +679,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 					Toast.makeText(getApplicationContext(), "已保存", 1000).show();
 				} else {
 					Toast.makeText(getApplicationContext(), "截图失败", 1000).show();
+
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -688,31 +690,50 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	 */
 	private void videoRecord() {
 		try {
-
-			if (recording == true) {
-				if (mLibVLC.videoRecordStop()) {
-					Toast.makeText(getApplicationContext(), "停止录像", 500)
-							.show();
-				} else {
-					Toast.makeText(getApplicationContext(), "停止录像失败", 500)
-							.show();
-				}
-				recording = false;
-			} else {
-
+			if(!recording){
 				SimpleDateFormat df = new SimpleDateFormat(
 						"yyyy-MM-dd HH-mm-ss");
 				String name = df.format(new Date());
-				if (mLibVLC.videoRecordStart(BitmapUtils.getSDPath()
-						+ "/ab/video/" + name)) {
+				String path = BitmapUtils.getSDPath()+"/ab/video/"+name;
+				mLibVLC.videoRecordStart(path);
+				if (mLibVLC.videoIsRecording()) {
 					Toast.makeText(getApplicationContext(), "开始录像", 500)
 							.show();
-					recording = true;
 				} else {
 					Toast.makeText(getApplicationContext(), "开始录像失败", 500)
 							.show();
 				}
+				recording = true;
 			}
+			else if(recording){
+				mLibVLC.videoRecordStop();
+					Toast.makeText(getApplicationContext(), "停止录像", 500)
+							.show();
+				recording = false;
+			}
+			Log.i(TAG,"mlibVLC.isRecording = "+mLibVLC.videoIsRecording());
+			Log.i(TAG,"recording = "+recording);
+//			if (mLibVLC.videoIsRecording()) {
+//				if (mLibVLC.videoRecordStop()) {
+//					Toast.makeText(getApplicationContext(), "停止录像", 500)
+//							.show();
+//				} else {
+//					Toast.makeText(getApplicationContext(), "停止录像失败", 500)
+//							.show();
+//				}
+//			} else {
+//				SimpleDateFormat df = new SimpleDateFormat(
+//						"yyyy-MM-dd HH-mm-ss");
+//				String name = df.format(new Date());
+//				String path = BitmapUtils.getSDPath()+"/ab/video/"+name;
+//				if (mLibVLC.videoRecordStart(path)) {
+//					Toast.makeText(getApplicationContext(), "开始录像", 500)
+//							.show();
+//				} else {
+//					Toast.makeText(getApplicationContext(), "开始录像失败", 500)
+//							.show();
+//				}
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

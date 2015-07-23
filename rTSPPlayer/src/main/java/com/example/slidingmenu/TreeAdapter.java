@@ -105,9 +105,10 @@ public class TreeAdapter extends BaseAdapter{
 				n.getCameraID();
 				Log.i("TreeAdpater", "n.getCameraID = " + n.getCameraID());
 
-//				Intent i = new Intent(con, VideoPlayerActivity.class);
-//				i.putExtra("result","rtsp://218.204.223.237:554/live/1/0547424F573B085C/gsfp90ef4k0a6iap.sdp");
-//				((Activity)con).startActivityForResult(i, 1);
+				Intent i = new Intent(con, VideoPlayerActivity.class);
+				//i.putExtra("result","rtsp://218.204.223.237:554/live/1/0547424F573B085C/gsfp90ef4k0a6iap.sdp");
+				//i.putExtra("result","rtsp://admin:12345@10.46.4.16/h264/ch1/main/av_stream");
+				//((Activity)con).startActivityForResult(i, 1);
 
 				if(n.getCameraID() != null){
 					StartRealTimePlayerAsyncTask rtsp = new StartRealTimePlayerAsyncTask(con);
@@ -115,7 +116,7 @@ public class TreeAdapter extends BaseAdapter{
 				}
 				else
 				{
-					Toast.makeText(con, "摄像机不在线！", Toast.LENGTH_SHORT);
+					Toast.makeText(con, "像机不在线！", Toast.LENGTH_SHORT);
 				}
 
 				}
