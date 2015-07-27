@@ -120,6 +120,115 @@
             android:layout_alignLeft="@+id/player_overlay_record"
             android:layout_alignStart="@+id/player_overlay_record"
             android:layout_alignParentEnd="true" />
+        <RelativeLayout
+            android:id="@+id/progress_overlay"
+            android:layout_width="fill_parent"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/grey1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:visibility="invisible" >
 
+            <ImageButton
+                android:id="@+id/lock_overlay_button"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/ic_lock" />
+
+            <TextView
+                android:id="@+id/player_overlay_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:layout_toRightOf="@+id/lock_overlay_button"
+                android:clickable="true"
+                android:text="date"
+                android:textColor="@color/orange"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/player_overlay_selectedtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:layout_toRightOf="@+id/player_overlay_date"
+                android:clickable="true"
+                android:text="00:00"
+                android:textColor="@color/orange"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/player_overlay_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:layout_toRightOf="@+id/player_overlay_selectedtime"
+                android:clickable="true"
+                android:text="00:00"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+            <SeekBar
+                android:id="@+id/player_overlay_seekbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/player_overlay_length"
+                android:layout_toRightOf="@+id/player_overlay_time"
+                android:maxHeight="2dip"
+                android:minHeight="2dip"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:progressDrawable="@drawable/po_seekbar"
+                android:thumb="@drawable/seekbar_thumb" />
+
+            <TextView
+                android:id="@+id/player_overlay_length"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toLeftOf="@+id/player_overlay_backward"
+                android:clickable="true"
+                android:text="24:00"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+            <ImageButton
+                android:id="@+id/player_overlay_backward"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/player_overlay_speed"
+                android:background="@drawable/ic_backward_w" />
+
+            <TextView
+                android:id="@+id/player_overlay_speed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/player_overlay_forward"
+                android:text="speed"
+                android:textColor="#ffffff"
+                android:textSize="15sp"/>
+
+            <ImageButton
+                android:id="@+id/player_overlay_forward"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ic_forward_w" />
+
+        </RelativeLayout>
     </RelativeLayout>
 </FrameLayout><!-- From: file:/C:/Users/liangxing/AndroidStudioProjects/RTSPPlayer-master/RTSPPlayer-master/rTSPPlayer/src/main/res/layout/player.xml -->

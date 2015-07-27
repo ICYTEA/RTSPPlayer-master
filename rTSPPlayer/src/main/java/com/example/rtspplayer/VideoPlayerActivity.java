@@ -2,6 +2,7 @@ package com.example.rtspplayer;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.videolan.libvlc.BitmapUtils;
@@ -18,10 +19,13 @@ import com.example.net.StopRealTimePlayerAsyncTask;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,27 +47,34 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class VideoPlayerActivity extends Activity implements Callback, IVideoPlayer {
 	
 	private static String TAG = "VideoPlayerActivity";
-	
+
+	/*SurfaceView to display */
 	private FrameLayout mSurfaceFrameLayout;
 	private SurfaceView mSurfaceView;
 	private SurfaceHolder mSurfaceHolder;
-	
+
+	/*Loading Animation View*/
 	private View mOverlayView;
 	private ImageButton mOverlayPlay;
 	private ImageView mOverlayLoading;
 	private TextView mOverlayLoadingText;
 	private boolean mShowing = false;
-	
+
+	/*Controlling Overlay View*/
 	private View mOverlayHeader;
+	private View mOverlayProgress;
 	private TextView mOverlayTitle;
 	private TextView mOverlayBattery;
 	private TextView mOverlaySystime;
@@ -71,10 +82,26 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	private ImageButton mOverlayScreenShot;
 	private ImageButton mOverlayRecord;
 	private ImageButton mOverlayMore;
+	private ImageButton mOverlayLock;
+	private ImageButton mOverlayBackward;
+	private ImageButton mOverlayForward;
+	private TextView mOverlayDate;
+	private TextView mOverlaySelectedTime;
+	private TextView mOverlayTime;
+	private SeekBar mOverlaySeekbar;
+	private TextView mOverlayLength;
+
+	/*Select Calender*/
+	private int year;
+	private int month;
+	private int day;
+	private Calendar calendar;
+
 	private boolean recording = false;
 	private boolean isPlaying = false;
 	private LibVLC mLibVLC;
-	
+
+	/*Intent parameters*/
 	private Intent intent;
 	private String ip;
 	private String cameraCode;
@@ -105,21 +132,20 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
     private float mTouchY, mTouchX, mVol;
     private int mTouchAction;
     
-    //set surface size
+    /*Set Surface*/
     private static final int TOUCH_NONE = 0;
     private static final int TOUCH_VOLUME = 1;
     private static final int TOUCH_BRIGHTNESS = 2;
     private static final int TOUCH_SEEK = 3;
     private static final int OVERLAY_TIMEOUT = 4000;
     private boolean mIsFirstBrightnessGesture = true;
-   
     
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
+		Log.i(TAG,"onCreate");
 		//Set surface view
 		setContentView(R.layout.player);
 		mSurfaceFrameLayout = (FrameLayout)findViewById(R.id.player_surface_frame);
@@ -146,24 +172,46 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 		mSurfaceHolder.setFormat(PixelFormat.RGBX_8888);
 		mSurfaceHolder.setFormat(PixelFormat.TRANSLUCENT);
 		mSurfaceHolder.addCallback(this);
-		
+
+		//Initial Option Overlay View
 		mOverlayHeader = (View)findViewById(R.id.player_overlay_header);
 		mOverlayTitle = (TextView)findViewById(R.id.player_overlay_title);
 		mOverlayBattery = (TextView)findViewById(R.id.player_overlay_battery);
 		mOverlaySystime = (TextView)findViewById(R.id.player_overlay_systime);
-        mOverlayPlayPause = (ImageButton) findViewById(R.id.player_overlay_play);
-        mOverlayPlayPause.setOnClickListener(mPlayPauseListener);
 		mOverlayScreenShot = (ImageButton)findViewById(R.id.player_overlay_size);
 		mOverlayScreenShot.setOnClickListener(mScreenShotListener);
 		mOverlayRecord = (ImageButton) findViewById(R.id.player_overlay_record);
 		mOverlayRecord.setOnClickListener(mOverlayRecordListener);
 		mOverlayMore = (ImageButton)findViewById(R.id.player_overlay_more);
 		mOverlayMore.setOnClickListener(mOverlayMoreListener);
-		
+
+		//Initial Progress Overlay View
+		mOverlayProgress = (View)findViewById(R.id.progress_overlay);
+		mOverlayPlayPause = (ImageButton) findViewById(R.id.player_overlay_play);
+		mOverlayPlayPause.setOnClickListener(mPlayPauseListener);
+		mOverlayLock = (ImageButton)findViewById(R.id.lock_overlay_button);
+		mOverlayBackward = (ImageButton)findViewById(R.id.player_overlay_backward);
+		mOverlayForward = (ImageButton)findViewById(R.id.player_overlay_forward);
+		calendar = Calendar.getInstance();
+		year = calendar.get(Calendar.YEAR);
+		month = calendar.get(Calendar.MONTH);
+		day = calendar.get(Calendar.DATE);
+		mOverlayDate = (TextView)findViewById(R.id.player_overlay_date);
+		mOverlayDate.setText(year+"-"+month+"-"+day);
+		mOverlayDate.setOnClickListener(mOverlayDateListener);
+		mOverlaySelectedTime = (TextView)findViewById(R.id.player_overlay_selectedtime);
+		mOverlaySelectedTime.setOnClickListener(mOverlaySelectedTimeListener);
+		mOverlayTime = (TextView)findViewById(R.id.player_overlay_time);
+		mOverlaySeekbar = (SeekBar)findViewById(R.id.player_overlay_seekbar);
+		mOverlaySeekbar.setOnSeekBarChangeListener(mSeekListener);
+		mOverlayLength = (TextView)findViewById(R.id.player_overlay_length);
+
+		//Loading Animation
 		mOverlayLoading = (ImageView)findViewById(R.id.player_overlay_loading);
 		mOverlayLoadingText = (TextView)findViewById(R.id.player_overlay_loading_text);
 		startLoadingAnimation();
-		
+
+		//Event Handler listen to view changes
 	    EventHandler em = EventHandler.getInstance();  
 	    em.addHandler(eventHandler);
 
@@ -174,11 +222,14 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		Log.i(TAG,"onResume");
 		if(mLibVLC != null){
 			intent = getIntent();
 			MRL = intent.getStringExtra("result");
 			cameraCode = intent.getStringExtra("cameraCode");
 			mLibVLC.playMRL(MRL);
+			//mLibVLC.playMRL("rtsp://admin:12345@10.46.4.16/h264/ch1/main/av_stream");
+			//mLibVLC.playMRL("rtsp://218.204.223.237:554/live/1/0547424F573B085C/gsfp90ef4k0a6iap.sdp");
 			isPlaying = true;
 			Log.i(TAG, "MRL = "+MRL);
 		}
@@ -188,6 +239,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	@Override 
 	protected void onPause(){
 		super.onPause();
+		Log.i(TAG,"onPauer");
 		if(mLibVLC!=null){
 			mLibVLC.stop();
 			Log.i(TAG, "on Pause, mLibVLC.stop");
@@ -401,13 +453,13 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 			case MotionEvent.ACTION_UP:
 				Log.i(TAG, "MotionEvent = Up");
 				
-//				if(mTouchAction == TOUCH_NONE){
-//		             if (!mShowing) {
-//		                 showOverlay();
-//		             } else {
-//		                 hideOverlay(true);
-//		             }
-//				}
+				if(mTouchAction == TOUCH_NONE && !isPlaying){
+		             if (!mShowing) {
+		                 showOverlay();
+		             } else {
+		                 hideOverlay(true);
+		             }
+				}
 				stopCameraControl();
 				break;
 			}
@@ -475,7 +527,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	     */
 	    private final Handler eventHandler = new VideoPlayerEventHandler(this);
 
-	    private static class VideoPlayerEventHandler extends WeakHandler<VideoPlayerActivity> {
+	    private class VideoPlayerEventHandler extends WeakHandler<VideoPlayerActivity> {
 	        public VideoPlayerEventHandler(VideoPlayerActivity owner) {
 	            super(owner);
 	        }
@@ -558,21 +610,16 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	    /**
 	     * show overlay
 	     */
-	    
 	    private void showOverlay(){
 	    	showOverlay(OVERLAY_TIMEOUT);
 	    }
 	    
 	    private void showOverlay(int timeout) {
-
 	        if (!mShowing) {
 	            mShowing = true;
 	            mOverlayHeader.setVisibility(View.VISIBLE);
 	            mOverlayPlayPause.setVisibility(View.VISIBLE);
-//	            mOverlayOption.setVisibility(View.VISIBLE);
-//	            mMenu.setVisibility(View.VISIBLE);
-//	            dimStatusBar(false);
-//	            mOverlayProgress.setVisibility(View.VISIBLE);
+				mOverlayProgress.setVisibility(View.VISIBLE);
 	        }
 	        Message msg = mHandler.obtainMessage(FADE_OUT);
 	        if (timeout != 0) {
@@ -581,7 +628,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	        }
 	        updateOverlayPausePlay();
 	   }
-	     
+
 	     /**
 	      * hider overlay
 	      */
@@ -591,22 +638,65 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	             if (!fromUser) {
 	                 mOverlayHeader.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
 	                 mOverlayPlayPause.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
+					 mOverlayProgress.startAnimation(AnimationUtils.loadAnimation(this,android.R.anim.fade_out));
 //	                 mOverlayOption.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
 //	                 mOverlayProgress.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
 //	                 mMenu.startAnimation(AnimationUtils.loadAnimation(this, android.R.anim.fade_out));
 	             }
 	             mOverlayHeader.setVisibility(View.INVISIBLE);
 	             mOverlayPlayPause.setVisibility(View.INVISIBLE);
+				 mOverlayProgress.setVisibility(View.INVISIBLE);
 	             mShowing = false;
-//	             mOverlayOption.setVisibility(View.INVISIBLE);
-//	             mOverlayProgress.setVisibility(View.INVISIBLE);
-//	             mMenu.setVisibility(View.INVISIBLE);
-//	             dimStatusBar(true);
+
 	         }
 	     }
-	     
+
+		/**
+		 * Select record day by calender
+		 */
+
+		private OnClickListener mOverlayDateListener = new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Log.i(TAG,"textView on click");
+
+				dialog().show();
+
+			}
+			public DatePickerDialog dialog() {
+
+				DatePickerDialog datePickerDialog = new DatePickerDialog(VideoPlayerActivity.this, new DatePickerDialog.OnDateSetListener() {
+					@Override
+					public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+						String date = Integer.toString(year) + "-" + Integer.toString(monthOfYear+1) + "-" + Integer.toString(dayOfMonth);
+						mOverlayDate.setText(date);
+					}
+				}, year, month, day);
+
+				return datePickerDialog;
+			}
+		};
+
+		private OnClickListener mOverlaySelectedTimeListener = new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Log.i(TAG, "mOverlaySelectedTime on click");
+				dialog().show();
+			}
+
+			public TimePickerDialog dialog(){
+				TimePickerDialog timePickerDialog = new TimePickerDialog(VideoPlayerActivity.this, new TimePickerDialog.OnTimeSetListener() {
+					@Override
+					public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+						mOverlaySelectedTime.setText((hour<10 ? "0"+hour : hour)+":"+ (minute<10 ? "0"+minute : minute));
+					}
+				}, 00, 00, true);
+
+				return  timePickerDialog;
+			}
+		};
 	   /**
-	    * updata Overlay
+	    * update Overlay
 	    */
 	    private void updateOverlayPausePlay() {
 	        if (mLibVLC == null)
@@ -614,6 +704,31 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	            mOverlayPlayPause.setBackgroundResource(mLibVLC.isPlaying() ? R.drawable.ic_pause_circle_big_o
 	                            : R.drawable.ic_play_circle_big_o);
 	    }
+
+		/**
+		*  seekbar listener
+		*/
+		private SeekBar.OnSeekBarChangeListener mSeekListener = new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+				Log.i(TAG, "onProgressChanged");
+				Log.i(TAG, "the progress = " + i);
+				String hourTime = (i*24/100)<10 ? "0"+Integer.toString(i * 24 / 100) : Integer.toString(i * 24 / 100);
+				int minuteTime = Math.round(((float) (i * 24) / 100) % 1 * 60);
+				String minutetime = minuteTime<10 ? "0"+Integer.toString(minuteTime) : Integer.toString(minuteTime);
+				mOverlaySelectedTime.setText(hourTime+":"+minutetime);
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				Log.i(TAG,"onStartTrackingTouch");
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				Log.i(TAG, "onStopTrackingTouch");
+			}
+		};
 
 	    /**
 	    *  pause media playing 
@@ -666,6 +781,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 				if(isPlaying) {
 					mLibVLC.stop();
 					isPlaying = false;
+					startLoadingAnimation();
 					playVideoRecorded();
 				}
 				else {
@@ -677,8 +793,8 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 		};
 
 		private void playVideoRecorded(){
-
-			mLibVLC.playMRL("rtsp://admin:12345@10.46.4.16/h264/ch1/main/av_stream");
+			//mLibVLC.playMRL("rtsp://admin:12345@10.46.4.16/h264/ch1/main/av_stream");
+			mLibVLC.playMRL(MRL);
 		}
 		/**
 		 * take a snapshot
