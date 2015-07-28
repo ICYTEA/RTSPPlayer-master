@@ -1,6 +1,7 @@
 package com.example.rtspplayer;
 
 import java.io.File;
+import java.security.PrivateKey;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,7 +14,9 @@ import org.videolan.libvlc.LibVlcException;
 import org.videolan.libvlc.VLCInstance;
 import org.videolan.libvlc.WeakHandler;
 
+import com.example.net.GetRecordFileList;
 import com.example.net.NetControlAsyncTask;
+import com.example.net.StartRealTimePlayerAsyncTask;
 import com.example.net.StopRealTimePlayerAsyncTask;
 
 import android.annotation.TargetApi;
@@ -55,6 +58,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import javax.xml.transform.Templates;
 
 public class VideoPlayerActivity extends Activity implements Callback, IVideoPlayer {
 	
@@ -618,7 +623,6 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	     * show overlay
 	     */
 	    private void showOverlay(){
-			updateOverlayPausePlay();
 	    	showOverlay(OVERLAY_TIMEOUT);
 	    }
 	    
@@ -635,7 +639,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	            mHandler.removeMessages(FADE_OUT);
 	            mHandler.sendMessageDelayed(msg, timeout);
 	        }
-
+			updateOverlayPausePlay();
 	   }
 
 	     /**
@@ -762,9 +766,33 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 					if(selectTime || selectDate || isFirstRecordPlaying)
 					{
 						Log.i(TAG, "ask for record file");
+
+						GetRecordFileList getRecordFileList = new GetRecordFileList();
+						String beginTime = mOverlayDate.getText() + " " + mOverlaySelectedTime.getText()+":00";
+						String endTime;
+						//Calculate end time
+						if(mOverlaySelectedTime.getText().toString().substring(0,2).equals("23"))
+						{
+							endTime = mOverlayDate.getText()+" "+"24:00:00";
+						}
+						else
+						{
+							String temp = new String(mOverlaySelectedTime.getText().toString().substring(0,2));
+							Log.i(TAG, "temp = " + temp);
+							int tempInt = Integer.parseInt(temp) + 1 ;
+							if(tempInt < 10)
+								temp = "0"+Integer.toString(tempInt);
+							else temp = Integer.toString(tempInt);
+							//temp.replace(temp.charAt(3), (Integer.parseInt(temp.charAt(3)) + 1).toString());
+							endTime = mOverlayDate.getText()+" " + temp + mOverlaySelectedTime.getText().toString().substring(2,5)+":00";
+
+						}
+
+						Log.i(TAG, "beginTime = "+ beginTime + "; endTime = " + endTime);
 						selectDate = false;
 						selectDate = false;
 						isFirstRecordPlaying = false;
+
 					}
 					else {
 						mLibVLC.play();
