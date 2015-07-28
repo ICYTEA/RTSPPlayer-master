@@ -33,7 +33,6 @@ public class StartRealTimePlayerAsyncTask extends AsyncTask<String, Integer, Str
 	private String ip;
 	private String cameraCode;
 	private int port;
-	private static String SoapFault = "SoapFault";
 	
 	public StartRealTimePlayerAsyncTask(Context con){
 		this.mContext = con;
@@ -72,7 +71,6 @@ public class StartRealTimePlayerAsyncTask extends AsyncTask<String, Integer, Str
 		Log.i(TAG, "ip = "+ip);		
 		
 		// 设置需调用WebService接口需要传入的两个参,这里传参时要注意,有时这个地方传参,在传入参数名时,要用wsdl文件上的方法的参数名,否则有可能报错
-//		cameraCode = "45010200051320000045";
 		cameraCode = params[0];
 		Log.i(TAG, "cameraCode = "+cameraCode);
 		port = 3000;

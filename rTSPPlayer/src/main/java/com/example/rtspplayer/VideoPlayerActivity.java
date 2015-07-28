@@ -99,6 +99,9 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 
 	private boolean recording = false;
 	private boolean isPlaying = false;
+	private boolean selectDate = false;
+	private boolean selectTime = false;
+	private boolean isFirstRecordPlaying = false;
 	private LibVLC mLibVLC;
 
 	/*Intent parameters*/
@@ -228,8 +231,6 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 			MRL = intent.getStringExtra("result");
 			cameraCode = intent.getStringExtra("cameraCode");
 			mLibVLC.playMRL(MRL);
-			//mLibVLC.playMRL("rtsp://admin:12345@10.46.4.16/h264/ch1/main/av_stream");
-			//mLibVLC.playMRL("rtsp://218.204.223.237:554/live/1/0547424F573B085C/gsfp90ef4k0a6iap.sdp");
 			isPlaying = true;
 			Log.i(TAG, "MRL = "+MRL);
 		}
@@ -550,11 +551,17 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	                	Log.i(TAG, "stop anim");
 	                	activity.stopLoadingAnimation();
 	                	break;
+					case EventHandler.MediaPlayerPaused:
+						Log.i(TAG, "MediaPlayerPaused");
+						break;
+					case EventHandler.MediaPlayerStopped:
+						Log.i(TAG, "MediaPlayerStopped");
+						break;
 	                default:
 	                    //Log.e(TAG, String.format("Event not handled (0x%x)", msg.getData().getInt("event")));
 	                    break;
 	            }
-//	            activity.updateOverlayPausePlay();
+	            activity.updateOverlayPausePlay();
 	        }
 	    };
 
@@ -611,10 +618,12 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	     * show overlay
 	     */
 	    private void showOverlay(){
+			updateOverlayPausePlay();
 	    	showOverlay(OVERLAY_TIMEOUT);
 	    }
 	    
 	    private void showOverlay(int timeout) {
+
 	        if (!mShowing) {
 	            mShowing = true;
 	            mOverlayHeader.setVisibility(View.VISIBLE);
@@ -626,7 +635,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	            mHandler.removeMessages(FADE_OUT);
 	            mHandler.sendMessageDelayed(msg, timeout);
 	        }
-	        updateOverlayPausePlay();
+
 	   }
 
 	     /**
@@ -673,6 +682,8 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 					}
 				}, year, month, day);
 
+				selectDate = true;
+
 				return datePickerDialog;
 			}
 		};
@@ -690,7 +701,9 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 					public void onTimeSet(TimePicker timePicker, int hour, int minute) {
 						mOverlaySelectedTime.setText((hour<10 ? "0"+hour : hour)+":"+ (minute<10 ? "0"+minute : minute));
 					}
-				}, 00, 00, true);
+				}, 12, 00, true);
+
+				selectTime = true;
 
 				return  timePickerDialog;
 			}
@@ -701,8 +714,9 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	    private void updateOverlayPausePlay() {
 	        if (mLibVLC == null)
 	            return;
-	            mOverlayPlayPause.setBackgroundResource(mLibVLC.isPlaying() ? R.drawable.ic_pause_circle_big_o
+			mOverlayPlayPause.setBackgroundResource(mLibVLC.isPlaying() ? R.drawable.ic_pause_circle_big_o
 	                            : R.drawable.ic_play_circle_big_o);
+			Log.i(TAG,"mOverlayPlayPause changed");
 	    }
 
 		/**
@@ -745,12 +759,22 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	            }
 	            else
 	            {
-	            	mLibVLC.play();
-	            	mSurfaceView.setKeepScreenOn(true);
-	            	Log.i(TAG, "media playing on click listener start!");
-		            Log.i(TAG, "mLibVLC.play");
+					if(selectTime || selectDate || isFirstRecordPlaying)
+					{
+						Log.i(TAG, "ask for record file");
+						selectDate = false;
+						selectDate = false;
+						isFirstRecordPlaying = false;
+					}
+					else {
+						mLibVLC.play();
+						mSurfaceView.setKeepScreenOn(true);
+						Log.i(TAG, "media playing on click listener start!");
+						Log.i(TAG, "mLibVLC.play");
+
+					}
 	            }
-	            showOverlay();
+				showOverlay();
 	        }
 	    };
 	    
@@ -780,9 +804,11 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 				Toast.makeText(getApplicationContext(), "more listener", 1000).show();
 				if(isPlaying) {
 					mLibVLC.stop();
+					showOverlay(2000000);
 					isPlaying = false;
-					startLoadingAnimation();
-					playVideoRecorded();
+					isFirstRecordPlaying = true;
+//					startLoadingAnimation();
+//					playVideoRecorded();
 				}
 				else {
 					mLibVLC.playMRL(MRL);
@@ -794,7 +820,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 
 		private void playVideoRecorded(){
 			//mLibVLC.playMRL("rtsp://admin:12345@10.46.4.16/h264/ch1/main/av_stream");
-			mLibVLC.playMRL(MRL);
+			//mLibVLC.playMRL(MRL);
 		}
 		/**
 		 * take a snapshot

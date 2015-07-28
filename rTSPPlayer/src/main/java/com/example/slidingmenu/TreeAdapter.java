@@ -107,8 +107,8 @@ public class TreeAdapter extends BaseAdapter{
 
 				Intent i = new Intent(con, VideoPlayerActivity.class);
 
-				i.putExtra("result","rtsp://218.204.223.237:554/live/1/0547424F573B085C/gsfp90ef4k0a6iap.sdp");
-				//i.putExtra("result","rtsp://admin:12345@10.46.4.16/h264/ch1/main/av_stream");
+				//i.putExtra("result","rtsp://218.204.223.237:554/live/1/0547424F573B085C/gsfp90ef4k0a6iap.sdp");
+				i.putExtra("result","rtsp://admin:12345@10.46.4.16/h264/ch1/main/av_stream");
 				((Activity)con).startActivityForResult(i, 1);
 
 //				if(n.getCameraID() != null){

@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@drawable/ic_pause_circle"
+            android:background="@drawable/ic_play_circle_big_normal_o"
             android:visibility="invisible"/> 
          
         <ImageView
