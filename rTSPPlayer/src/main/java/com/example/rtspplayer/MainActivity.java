@@ -1,9 +1,11 @@
 package com.example.rtspplayer;
 
+import org.kobjects.util.Util;
 import org.videolan.libvlc.IVideoPlayer;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.LibVlcException;
 import org.videolan.libvlc.LibVlcUtil;
+import org.videolan.libvlc.VLCApplication;
 import org.videolan.libvlc.VLCInstance;
 
 import com.slidingmenu.lib.SlidingMenu;
@@ -28,6 +30,8 @@ import android.os.Message;
 import android.provider.Settings.SettingNotFoundException;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
@@ -101,6 +105,7 @@ public class MainActivity extends FragmentActivity {
 		SampleListFragment menuFrame = new SampleListFragment(mSlidingMenu);
 		getSupportFragmentManager().beginTransaction()
 		.replace(R.id.menu_frame, menuFrame).commit();
+		changeMenuOffset();
 	   
 		mTitleLeftButton.setOnClickListener(new OnClickListener(){
 
@@ -130,8 +135,30 @@ public class MainActivity extends FragmentActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         setSurfaceSize(mVideoWidth, mVideoHeight, mVideoVisibleWidth, mVideoVisibleHeight, mSarNum, mSarDen);
         super.onConfigurationChanged(newConfig);
+		changeMenuOffset();
     }
-    
+
+	private void changeMenuOffset() {
+		WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		@SuppressWarnings("deprecation")
+		int behindOffset_dp = convertPxToDp(display.getWidth()) - 300;
+		mSlidingMenu.setBehindOffset(convertDpToPx(behindOffset_dp));
+	}
+	public static int convertPxToDp(int px) {
+		DisplayMetrics metrics = VLCApplication.getAppResources().getDisplayMetrics();
+		float logicalDensity = metrics.density;
+		int dp = Math.round(px / logicalDensity);
+		return dp;
+	}
+
+
+	public static int convertDpToPx(int dp) {
+		return Math.round(
+				TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+						VLCApplication.getAppResources().getDisplayMetrics())
+		);
+	}
 	public void setSurfaceSize(int width, int height, int visible_width,
 			int visible_height, int sar_num, int sar_den) {
 		// TODO Auto-generated method stub

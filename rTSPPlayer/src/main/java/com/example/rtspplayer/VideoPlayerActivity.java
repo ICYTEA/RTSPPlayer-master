@@ -767,9 +767,9 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 					{
 						Log.i(TAG, "ask for record file");
 
-						GetRecordFileList getRecordFileList = new GetRecordFileList();
 						String beginTime = mOverlayDate.getText() + " " + mOverlaySelectedTime.getText()+":00";
 						String endTime;
+
 						//Calculate end time
 						if(mOverlaySelectedTime.getText().toString().substring(0,2).equals("23"))
 						{
@@ -778,15 +778,17 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 						else
 						{
 							String temp = new String(mOverlaySelectedTime.getText().toString().substring(0,2));
-							Log.i(TAG, "temp = " + temp);
 							int tempInt = Integer.parseInt(temp) + 1 ;
 							if(tempInt < 10)
 								temp = "0"+Integer.toString(tempInt);
 							else temp = Integer.toString(tempInt);
 							//temp.replace(temp.charAt(3), (Integer.parseInt(temp.charAt(3)) + 1).toString());
 							endTime = mOverlayDate.getText()+" " + temp + mOverlaySelectedTime.getText().toString().substring(2,5)+":00";
-
 						}
+
+						//Ask for record file
+						GetRecordFileList getRecordFileList = new GetRecordFileList(getApplicationContext());
+						getRecordFileList.execute(cameraCode,beginTime,endTime);
 
 						Log.i(TAG, "beginTime = "+ beginTime + "; endTime = " + endTime);
 						selectDate = false;
@@ -829,7 +831,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 		private final  OnClickListener mOverlayMoreListener = new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Toast.makeText(getApplicationContext(), "more listener", 1000).show();
+				//Toast.makeText(getApplicationContext(), "more listener", 1000).show();
 				if(isPlaying) {
 					mLibVLC.stop();
 					showOverlay(2000000);

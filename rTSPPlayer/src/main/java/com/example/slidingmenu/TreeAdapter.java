@@ -123,7 +123,7 @@ public class TreeAdapter extends BaseAdapter{
 				}
 			}
 		}
-		
+
 	/**
 	 * 设置展开等级
 	 * @param level
