@@ -10,12 +10,13 @@ public class NodeResource {
 	protected String curId;
 	protected String name;
 	protected String cameraId;
+	protected String cameraCode;
 	protected int iconId;
 	protected int port;
 	protected boolean isSpeedDomeCamera;
 
 	public NodeResource(String parentId, String curId, String name,
-			String cameraID, int iconId, String isSpeedDomeCamera) {
+			String cameraID, int iconId, String isSpeedDomeCamera, String cameraCode) {
 		super();
 		this.curId = curId;
 		this.parentId = parentId;
@@ -24,6 +25,7 @@ public class NodeResource {
 		this.iconId = iconId;
 		this.port = Integer.parseInt(curId);
 		this.isSpeedDomeCamera = isSpeedDomeCamera.equals("true")?true:false;
+		this.cameraCode = cameraCode;
 	}
 
 	public boolean isSpeedDomeCamera(){
@@ -45,6 +47,12 @@ public class NodeResource {
 	public String getCameraId() {
 		Log.i(TAG, "NodeResource.getCameraId, return "+this.cameraId);
 		return this.cameraId;
+	}
+
+	public String getCameraCode(){
+
+		Log.i(TAG, "NodeResource.getCameraCode, return "+this.cameraCode);
+		return this.cameraCode;
 	}
 
 	public int getIconId() {

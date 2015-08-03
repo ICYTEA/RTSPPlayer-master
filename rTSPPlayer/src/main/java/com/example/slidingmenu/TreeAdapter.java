@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
@@ -104,21 +105,22 @@ public class TreeAdapter extends BaseAdapter{
 				//接入服务器，请求流
 				n.getCameraID();
 				Log.i("TreeAdpater", "n.getCameraID = " + n.getCameraID());
+				Log.i("TreeAdapter", "n.getCameraCode = "+n.getCameraCode());
 
 				Intent i = new Intent(con, VideoPlayerActivity.class);
 
 				//i.putExtra("result","rtsp://218.204.223.237:554/live/1/0547424F573B085C/gsfp90ef4k0a6iap.sdp");
-				i.putExtra("result","rtsp://admin:12345@10.46.4.16/h264/ch1/main/av_stream");
-				((Activity)con).startActivityForResult(i, 1);
+//				i.putExtra("result","rtsp://admin:12345@10.46.4.16/h264/ch1/main/av_stream");
+//				((Activity)con).startActivityForResult(i, 1);
 
-//				if(n.getCameraID() != null){
-//					StartRealTimePlayerAsyncTask rtsp = new StartRealTimePlayerAsyncTask(con);
-//					rtsp.execute(n.getCameraID());
-//				}
-//				else
-//				{
-//					Toast.makeText(con, "像机不在线！", Toast.LENGTH_SHORT);
-//				}
+				if(n.getCameraID() != null){
+					StartRealTimePlayerAsyncTask rtsp = new StartRealTimePlayerAsyncTask(con);
+					rtsp.execute(n.getCameraID(), n.getCameraCode());
+				}
+				else
+				{
+					Toast.makeText(con, "像机不在线！", Toast.LENGTH_SHORT);
+				}
 
 				}
 			}
@@ -190,6 +192,7 @@ public class TreeAdapter extends BaseAdapter{
 			view = lif.inflate(R.layout.list_item, null);
 			vi = new ViewItem();
 			vi.flagIcon = (ImageView)view.findViewById(R.id.ivec);
+			vi.flagIcon.setImageResource(R.drawable.triangle);
 			vi.tv = (TextView)view.findViewById(R.id.itemvalue);
 			vi.icon =(ImageView)view.findViewById(R.id.ivicon);
 			view.setTag(vi);

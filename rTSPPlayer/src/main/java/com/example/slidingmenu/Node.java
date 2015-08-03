@@ -6,7 +6,8 @@ public class Node {
 private Node parent = null; // 父节点
 private List<Node> childrens = new ArrayList<Node>();//子节点
 private String name;//节点显示文字
-private String cameraID;//节点显示值
+private String cameraID;//设备Id（请求视频流）
+private String cameraCode;//设备编号（调用录像）
 private int port;//端口值
 private int icon = -1; //icon(R.drawable的id)
 private boolean isChecked = false; //是否被选中
@@ -24,10 +25,11 @@ private boolean isSpeedDomeCamera;
 	 * @param curId
 	 *            TODO
 	 */
-public Node(String name,String cameraID, String parentId,String curId, int iconId, int port, boolean isSpeedDomeCamera) {
+public Node(String name,String cameraID, String cameraCode, String parentId,String curId, int iconId, int port, boolean isSpeedDomeCamera) {
 	// TODO Auto-generated constructor stub
 	this.name = name;
 	this.cameraID = cameraID;
+	this.cameraCode = cameraCode;
 	this.parentId = parentId;
 	this.icon = iconId;
 	this.curId = curId;
@@ -133,7 +135,7 @@ public void setName(String name) {
 	this.name = name;
 }
 /**
- * 得到节点值
+ * 得到设备Id
  * @return
  *
  */
@@ -141,12 +143,20 @@ public String getCameraID() {
 	return cameraID;
 }
 /**
- * 设置节点值
+ * 设置设备Id
  * @param value
  *
  */
 public void setCameraID(String cameraID) {
 	this.cameraID = cameraID;
+}
+
+public String getCameraCode(){
+	return this.cameraCode;
+}
+
+public void setCameraCode(String cameraCode){
+	this.cameraCode = cameraCode;
 }
 /**
  * 增加一个子节点

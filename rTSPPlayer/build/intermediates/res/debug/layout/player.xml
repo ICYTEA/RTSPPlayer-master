@@ -217,7 +217,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="5dp"
                 android:layout_toLeftOf="@+id/player_overlay_forward"
-                android:text="speed"
+                android:text="1x"
                 android:textColor="#ffffff"
                 android:textSize="15sp"/>
 

@@ -7,6 +7,7 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
+import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.SoapFault;
 
 import com.example.rtspplayer.MainActivity;
@@ -31,6 +32,7 @@ public class StartRealTimePlayerAsyncTask extends AsyncTask<String, Integer, Str
 	private String methodName = "startRealtimeStream";
 	private String EndPointness = "http://10.46.4.12:9100/VideoMonitor/services/ClientVodServicePublish";
 	private String ip;
+	private String cameraId;
 	private String cameraCode;
 	private int port;
 	
@@ -71,11 +73,13 @@ public class StartRealTimePlayerAsyncTask extends AsyncTask<String, Integer, Str
 		Log.i(TAG, "ip = "+ip);		
 		
 		// 设置需调用WebService接口需要传入的两个参,这里传参时要注意,有时这个地方传参,在传入参数名时,要用wsdl文件上的方法的参数名,否则有可能报错
-		cameraCode = params[0];
+		cameraId = params[0];
+		Log.i(TAG, "cameraId = "+cameraId);
+		cameraCode = params[1];
 		Log.i(TAG, "cameraCode = "+cameraCode);
 		port = 3000;
 		
-		soapObject.addProperty("cameraCode", cameraCode);
+		soapObject.addProperty("cameraCode", cameraId);
 //		soapObject.addProperty("cameraCode", "34020000001310000001");
 		soapObject.addProperty("receiveIp", ip);
 		soapObject.addProperty("receivePort", port);
@@ -106,15 +110,24 @@ public class StartRealTimePlayerAsyncTask extends AsyncTask<String, Integer, Str
 			return envelop.bodyIn.toString();
 		
 		// 得到服务器传回的数据
-		SoapObject resultObj = (SoapObject) envelop.bodyIn;
-		String result = resultObj.getProperty(0).toString();
-		Log.i(TAG, result);
-		
+		//SoapObject resultObj = (SoapObject) envelop.bodyIn;
+		//String result = resultObj.getProperty(0).toString();
 		Intent i = new Intent(mContext, VideoPlayerActivity.class);
-		i.putExtra("result", result);
+		try {
+			Object resultObj = (Object)envelop.getResponse();
+			String result = resultObj.toString();
+			Log.i(TAG, " object result = "+result);
+			i.putExtra("result", result);
+		}catch (SoapFault soapFault) {
+			soapFault.printStackTrace();
+		}
+
+//		Intent i = new Intent(mContext, VideoPlayerActivity.class);
+//		i.putExtra("result", result);
 		i.putExtra("ip", ip);
-		i.putExtra("cameraCode", cameraCode);
+		i.putExtra("cameraId", cameraId);
 		i.putExtra("port", port);
+		i.putExtra("cameraCode", cameraCode);
 		
 		((Activity)mContext).startActivityForResult(i, 1);
 		

@@ -5,49 +5,54 @@
 		<company parentId="2" curId="3" name="环城分公司" speedDomeCamera="false"></company>
 			
 			<site parentId="3" curId="4" name="高峰收费站" speedDomeCamera="false"></site>
-				<device parentId="4" curId="8" name="中微16编码输出-1" cameraId="45010200051310000001" speedDomeCamera="false"></device>
-				<device parentId="4" curId="9" name="中微16编码输出-10" cameraId="45010200051310000010" speedDomeCamera="false"></device>
-				<device parentId="4" curId="10" name="中微16编码输出-11" cameraId="45010200051310000011" speedDomeCamera="false"></device>
-				<device parentId="4" curId="11" name="中微16编码输出-12" cameraId="45010200051310000012" speedDomeCamera="false"></device>
-				<device parentId="4" curId="12" name="中微16编码输出-13" cameraId="45010200051310000013" speedDomeCamera="false"></device>
-				<device parentId="4" curId="13" name="中微16编码输出-14" cameraId="45010200051310000014" speedDomeCamera="false"></device>
-				<device parentId="4" curId="14" name="中微16编码输出-15" cameraId="45010200051310000015" speedDomeCamera="false"></device>
-				<device parentId="4" curId="15" name="中微16编码输出-16" cameraId="45010200051310000016" speedDomeCamera="false"></device>
-				<device parentId="4" curId="16" name="中微16编码输出-2" cameraId="45010200051310000002" speedDomeCamera="false"></device>
-				<device parentId="4" curId="17" name="中微16编码输出-3" cameraId="45010200051310000003" speedDomeCamera="false"></device>
-				<device parentId="4" curId="18" name="中微16编码输出-4" cameraId="45010200051310000004" speedDomeCamera="false"></device>
-				<device parentId="4" curId="19" name="中微16编码输出-5" cameraId="45010200051310000005" speedDomeCamera="false"></device>
-				<device parentId="4" curId="20" name="中微16编码输出-6" cameraId="45010200051310000006" speedDomeCamera="false"></device>
-				<device parentId="4" curId="21" name="中微16编码输出-7" cameraId="45010200051310000007" speedDomeCamera="false"></device>
-				<device parentId="4" curId="22" name="中微16编码输出-8" cameraId="45010200051310000008" speedDomeCamera="false"></device>
-				<device parentId="4" curId="23" name="中微16编码输出-9" cameraId="45010200051310000009" speedDomeCamera="false"></device>
+				<device parentId="4" curId="8" name="中微16编码输出-1" cameraId="45010200051310000001" speedDomeCamera="false" cameraCode="NNWH_Cam1"></device>
+				<device parentId="4" curId="9" name="中微16编码输出-10" cameraId="45010200051310000010" speedDomeCamera="false" cameraCode="NNWH_Cam10"></device>
+				<device parentId="4" curId="10" name="中微16编码输出-11" cameraId="45010200051310000011" speedDomeCamera="false" cameraCode="NNWH_Cam11"></device>
+				<device parentId="4" curId="11" name="中微16编码输出-12" cameraId="45010200051310000012" speedDomeCamera="false" cameraCode="NNWH_Cam12"></device>
+				<device parentId="4" curId="12" name="中微16编码输出-13" cameraId="45010200051310000013" speedDomeCamera="false" cameraCode="NNWH_Cam13"></device>
+				<device parentId="4" curId="13" name="中微16编码输出-14" cameraId="45010200051310000014" speedDomeCamera="false" cameraCode="NNWH_Cam14"></device>
+				<device parentId="4" curId="14" name="中微16编码输出-15" cameraId="45010200051310000015" speedDomeCamera="false" cameraCode="NNWH_Cam15"></device>
+				<device parentId="4" curId="15" name="中微16编码输出-16" cameraId="45010200051310000016" speedDomeCamera="false" cameraCode="NNWH_Cam16"></device>
+				<device parentId="4" curId="16" name="中微16编码输出-2" cameraId="45010200051310000002" speedDomeCamera="false" cameraCode="NNWH_Cam2"></device>
+				<device parentId="4" curId="17" name="中微16编码输出-3" cameraId="45010200051310000003" speedDomeCamera="false" cameraCode="NNWH_Cam3"></device>
+				<device parentId="4" curId="18" name="中微16编码输出-4" cameraId="45010200051310000004" speedDomeCamera="false" cameraCode="NNWH_Cam4"></device>
+				<device parentId="4" curId="19" name="中微16编码输出-5" cameraId="45010200051310000005" speedDomeCamera="false" cameraCode="NNWH_Cam5"></device>
+				<device parentId="4" curId="20" name="中微16编码输出-6" cameraId="45010200051310000006" speedDomeCamera="false" cameraCode="NNWH_Cam6"></device>
+				<device parentId="4" curId="21" name="中微16编码输出-7" cameraId="45010200051310000007" speedDomeCamera="false" cameraCode="NNWH_Cam7"></device>
+				<device parentId="4" curId="22" name="中微16编码输出-8" cameraId="45010200051310000008" speedDomeCamera="false" cameraCode="NNWH_Cam8"></device>
+				<device parentId="4" curId="23" name="中微16编码输出-9" cameraId="45010200051310000009" speedDomeCamera="false" cameraCode="NNWH_Cam9"></device>
 			
 			<site parentId="3" curId="5" name="五塘收费站" speedDomeCamera="false"></site>
-				<device parentId="5" curId="24" name="XD枪机" cameraId="45010200051320000016" speedDomeCamera="false"></device>
-				<device parentId="5" curId="25" name="海康4编码输出_1" cameraId="45010200051310000017" speedDomeCamera="false"></device>
-				<device parentId="5" curId="26" name="海康4编码输出_2" cameraId="45010200051310000018" speedDomeCamera="false"></device>
-				<device parentId="5" curId="27" name="海康4编码输出_3" cameraId="45010200051310000019" speedDomeCamera="false"></device>
-				<device parentId="5" curId="28" name="海康4编码输出_4" cameraId="45010200051310000020" speedDomeCamera="false"></device>
-				
+				<device parentId="5" curId="24" name="LG枪机" cameraId="45010200051320000016" speedDomeCamera="false" cameraCode="di000000000000000070"></device>
+				<device parentId="5" curId="25" name="海康4编码输出_1" cameraId="45010200051310000017" speedDomeCamera="false" cameraCode="NNWH_Cam17"></device>
+				<device parentId="5" curId="26" name="海康4编码输出_2" cameraId="45010200051310000018" speedDomeCamera="false" cameraCode="NNWH_Cam18"></device>
+				<device parentId="5" curId="27" name="海康4编码输出_3" cameraId="45010200051310000019" speedDomeCamera="false" cameraCode="NNWH_Cam19"></device>
+				<device parentId="5" curId="28" name="海康4编码输出_4" cameraId="45010200051310000020" speedDomeCamera="false" cameraCode="NNWH_Cam20"></device>
+				<device parentId="5" curId="46" name="天地伟业枪机" cameraId="45010200051320000014" speedDomeCamera="false" cameraCode="di000000000000000071"></device>
+				<device parentId="5" curId="47" name="金三立球机" cameraId="45010200051320000048" speedDomeCamera="false" cameraCode="dev_150716175740327"></device>
+
 			<site parentId="3" curId="6" name="东山服务器" speedDomeCamera="false"></site>
-				<device parentId="6" curId="29" name="大华_IPC" cameraId="45010200051320000004" speedDomeCamera="false"></device>
-				<device parentId="6" curId="30" name="微创1编码输出_1" cameraId="45010200051310000037" speedDomeCamera="false"></device>
-				<device parentId="6" curId="31" name="微创2编码输出_1" cameraId="45010200051310000035" speedDomeCamera="false"></device>
-				<device parentId="6" curId="32" name="微创2编码输出_2" cameraId="45010200051310000036" speedDomeCamera="false"></device>
-				<device parentId="6" curId="33" name="诺龙2编码输出_1" cameraId="45010200051310000033" speedDomeCamera="false"></device>
-				<device parentId="6" curId="34" name="诺龙2编码输出_2" cameraId="45010200051310000034" speedDomeCamera="false"></device>
+				<device parentId="6" curId="29" name="大华_IPC" cameraId="45010200051320000004" speedDomeCamera="false" cameraCode="di000000000000000063"></device>
+				<device parentId="6" curId="30" name="微创1编码输出_1" cameraId="45010200051310000037" speedDomeCamera="false" cameraCode="di000000000000000066"></device>
+				<device parentId="6" curId="31" name="微创2编码输出_1" cameraId="45010200051310000035" speedDomeCamera="false" cameraCode="di000000000000000064"></device>
+				<device parentId="6" curId="32" name="微创2编码输出_2" cameraId="45010200051310000036" speedDomeCamera="false" cameraCode="di000000000000000065"></device>
+				<device parentId="6" curId="33" name="诺龙2编码输出_1" cameraId="45010200051310000033" speedDomeCamera="false" cameraCode="NNWH_Cam33"></device>
+				<device parentId="6" curId="34" name="诺龙2编码输出_2" cameraId="45010200051310000034" speedDomeCamera="false" cameraCode="NNWH_Cam34"></device>
+				<device parentId="6" curId="48" name="天地伟业半球" cameraId="45010200051320000017" speedDomeCamera="false" cameraCode="di000000000000000072"></device>
 				
 			<site parentId="3" curId="7" name="南宁外环路段监控" speedDomeCamera="false"></site>
-				<device parentId="7" curId="35" name="VD-C2200HS" cameraId="45010200051320000005" speedDomeCamera="false"></device>
-				<device parentId="7" curId="36" name="XD球机" cameraId="45010200051320000045" speedDomeCamera="false"></device>
-				<device parentId="7" curId="37" name="XD车牌识别IPC" cameraId="45010200051320000013" speedDomeCamera="false"></device>
-				<device parentId="7" curId="38" name="大华半球机" cameraId="45010200051320000007" speedDomeCamera="false"></device>
-				<device parentId="7" curId="39" name="安讯士-IPC" cameraId="45010200051320000003" speedDomeCamera="false"></device>
-				<device parentId="7" curId="40" name="安讯士球机-PTZ" cameraId="45010200051320000006" speedDomeCamera="false"></device>
-				<device parentId="7" curId="41" name="微创-IPC" cameraId="45010200051320000008" speedDomeCamera="false"></device>
-				<device parentId="7" curId="42" name="枪机AXIS" cameraId="45010200051320000046" speedDomeCamera="false"></device>
-				<device parentId="7" curId="43" name="柯达-IPC" cameraId="45010200051320000002" speedDomeCamera="false"></device>
-				<device parentId="7" curId="44" name="蛙视-IPC" cameraId="45010200051320000001" speedDomeCamera="false"></device>
-				<device parentId="7" curId="45" name="蛙视1编码输出-1" cameraId="45010200051310000049" speedDomeCamera="false"></device>
-		
+				<device parentId="7" curId="35" name="VD-C2200HS" cameraId="45010200051320000005" speedDomeCamera="false" cameraCode="NNWH_Cam_sip5"></device>
+				<device parentId="7" curId="36" name="XD球机" cameraId="45010200051320000045" speedDomeCamera="false" cameraCode="di000000000000000068"></device>
+				<device parentId="7" curId="37" name="金三立枪机IPC" cameraId="45010200051320000013" speedDomeCamera="false" cameraCode="NNWH_Cam_sip4"></device>
+				<device parentId="7" curId="38" name="大华半球机" cameraId="45010200051320000007" speedDomeCamera="false" cameraCode="NNWH_Cam_sip7"></device>
+				<device parentId="7" curId="39" name="安讯士-IPC" cameraId="45010200051320000003" speedDomeCamera="false" cameraCode="NNWH_Cam_sip3"></device>
+				<device parentId="7" curId="40" name="安讯士球机-PTZ" cameraId="45010200051320000006" speedDomeCamera="false" cameraCode="NNWH_Cam_sip6"></device>
+				<device parentId="7" curId="41" name="微创-IPC" cameraId="45010200051320000008" speedDomeCamera="false" cameraCode="NNWH_Cam_sip8"></device>
+				<device parentId="7" curId="42" name="枪机AXIS" cameraId="45010200051320000046" speedDomeCamera="false" cameraCode="di000000000000000069"></device>
+				<device parentId="7" curId="43" name="天地伟业球机" cameraId="45010200051320000002" speedDomeCamera="false" cameraCode="NNWH_Cam_sip2"></device>
+				<device parentId="7" curId="44" name="蛙视-IPC" cameraId="45010200051320000001" speedDomeCamera="false" cameraCode="NNWH_Cam_sip1"></device>
+				<device parentId="7" curId="45" name="蛙视1编码输出-1" cameraId="45010200051310000049" speedDomeCamera="false" cameraCode="NNWH_Cam49"></device>
+				<device parentId="7" curId="49" name="大华HFW" cameraId="45010200051320000018" speedDomeCamera="false" cameraCode="di000000000000000076"></device>
+
+
 </resources>

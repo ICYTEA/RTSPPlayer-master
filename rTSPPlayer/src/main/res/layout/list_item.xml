@@ -6,11 +6,20 @@
     android:minHeight="40dip" >
 
     <ImageView
+        android:id="@+id/ivec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="clip_vertical"
+        android:minHeight="50dip"
+        />
+
+    <ImageView
         android:id="@+id/ivicon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/ivec"
         android:gravity="center_vertical"
-        android:minHeight="40dip" />
+        android:minHeight="50dip" />
 
     <TextView
         android:id="@+id/itemvalue"
@@ -18,16 +27,9 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/ivicon"
         android:gravity="center_vertical"
-        android:textSize="18dip"
-        android:minHeight="40dip"
-        />
+        android:textSize="22dip"
+        android:minHeight="50dip" />
 
-    <ImageView
-        android:id="@+id/ivec"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:gravity="center_vertical"
-        android:src="@drawable/tree_ec" />
+
 
 </RelativeLayout>

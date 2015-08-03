@@ -43,15 +43,17 @@ public class NodePullParse {
                         	String name = parser.getAttributeValue(2);
                         	String cameraId = parser.getAttributeValue(3);
                         	String isSpeedDomeCamera = parser.getAttributeValue(4);
+                            String cameraCode = parser.getAttributeValue(5);
                         	
-                        	NodeResource deviceTemp = new NodeResource(parentId, curId, name, cameraId,R.drawable.icon_department, isSpeedDomeCamera);
+                        	NodeResource deviceTemp = new NodeResource(parentId, curId, name, cameraId,R.drawable.icon_department, isSpeedDomeCamera, cameraCode);
                             DeviceArray.add(deviceTemp);                            
                         }else if(tagName.equals("site")||tagName.equals("company")||tagName.equals("city")||tagName.equals("province")){
                           	String parentId = parser.getAttributeValue(0);
                         	String curId = parser.getAttributeValue(1);
                         	String name = parser.getAttributeValue(2);
                         	String cameraId = "-1";
-                        	NodeResource deviceTemp = new NodeResource(parentId, curId, name, cameraId,R.drawable.icon_department, "false");
+                            String cameraCode = "-1";
+                        	NodeResource deviceTemp = new NodeResource(parentId, curId, name, cameraId,R.drawable.icon_department, "false", cameraCode);
                             DeviceArray.add(deviceTemp);  
                         }
                         break;

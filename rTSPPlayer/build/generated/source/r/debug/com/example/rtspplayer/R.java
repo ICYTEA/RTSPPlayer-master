@@ -1019,7 +1019,8 @@ containing a value of this type.
         public static final int top_bar_bg=0x7f020093;
         public static final int tree_ec=0x7f020094;
         public static final int tree_ex=0x7f020095;
-        public static final int video_list_length_bg=0x7f020096;
+        public static final int triangle=0x7f020096;
+        public static final int video_list_length_bg=0x7f020097;
     }
     public static final class id {
         public static final int action_bar=0x7f0c0021;
@@ -1055,9 +1056,9 @@ containing a value of this type.
         public static final int icon=0x7f0c002f;
         public static final int ifRoom=0x7f0c0016;
         public static final int image=0x7f0c002c;
-        public static final int itemvalue=0x7f0c0047;
-        public static final int ivec=0x7f0c0048;
-        public static final int ivicon=0x7f0c0046;
+        public static final int itemvalue=0x7f0c0048;
+        public static final int ivec=0x7f0c0046;
+        public static final int ivicon=0x7f0c0047;
         public static final int left=0x7f0c0019;
         public static final int listMode=0x7f0c0007;
         public static final int list_item=0x7f0c002e;

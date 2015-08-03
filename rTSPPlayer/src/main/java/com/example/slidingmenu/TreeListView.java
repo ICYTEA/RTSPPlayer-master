@@ -80,7 +80,7 @@ public class TreeListView extends ListView {
 		Map<String, Node> nodemap = new HashMap<String, Node>();
 		for (int i = 0; i < res.size(); i++) {
 			NodeResource nr = res.get(i);
-			Node n = new Node(nr.name, nr.cameraId, nr.parentId, nr.curId,
+			Node n = new Node(nr.name, nr.cameraId, nr.cameraCode, nr.parentId, nr.curId,
 					nr.iconId, nr.port, nr.isSpeedDomeCamera);
 			nodemap.put(n.getCurId(), n);// 生成map树
 		}
