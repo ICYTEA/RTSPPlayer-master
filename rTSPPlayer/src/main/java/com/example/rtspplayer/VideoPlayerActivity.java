@@ -107,9 +107,10 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 
 	private boolean recording = false;
 	private boolean isPlaying = false;
-	private boolean selectDate = false;
-	private boolean selectTime = false;
+	private boolean selectDate = true;
+	private boolean selectTime = true;
 	private boolean isFirstRecordPlaying = false;
+	private boolean isNormalPause = false;
 	private LibVLC mLibVLC;
 
 	/*Intent parameters*/
@@ -262,6 +263,10 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 			mSurfaceView.setKeepScreenOn(false);
 			Log.i(TAG, "mSurfaceView.setKeepScreenOn(false)");
 		}
+		if(timer != null) {
+			timer.cancel();
+			Log.i(TAG, "timer.cancel");
+		}
 	}
 	
 	@Override
@@ -275,6 +280,10 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 			int port = intent.getExtras().getInt("port");
 			StopRealTimePlayerAsyncTask stp = new StopRealTimePlayerAsyncTask();
 			stp.execute(ip, cameraId, String.valueOf(port));
+		}
+		if(timer != null) {
+			timer.cancel();
+			Log.i(TAG, "timer.cancel");
 		}
 	}
 
@@ -299,7 +308,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 		// TODO Auto-generated method stub
 		mSurfaceHolder = holder;
 		if(mLibVLC != null){
-			mLibVLC.attachSurface(holder.getSurface(),VideoPlayerActivity.this);
+			mLibVLC.attachSurface(holder.getSurface(), VideoPlayerActivity.this);
 		}
 		if(width>0){
 			mVideoHeight = height;
@@ -449,23 +458,24 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 			
 			case MotionEvent.ACTION_DOWN:
 				//Audio & Brightness 
-				Log.i(TAG, "MotionEvent = Down");
+				//Log.i(TAG, "MotionEvent = Down");
 				mTouchY = event.getRawY();
 				mTouchX = event.getRawX();
 				mTouchAction = TOUCH_NONE;
 				break;
 				
 			case MotionEvent.ACTION_MOVE:
-				Log.i(TAG, "MotionEvent = Move");
+				//Log.i(TAG, "MotionEvent = Move");
 				// No volume/brightness action if coef < 2 
 				
-					//doBrightnessTouch(y_changed);	
+					//doBrightnessTouch(y_changed);
+				if(isPlaying)
 					startCameraControl(x_changed, y_changed);
 				
 				break;
 				
 			case MotionEvent.ACTION_UP:
-				Log.i(TAG, "MotionEvent = Up");
+				//Log.i(TAG, "MotionEvent = Up");
 				
 				if(mTouchAction == TOUCH_NONE && !isPlaying){
 		             if (!mShowing) {
@@ -474,7 +484,8 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 		                 hideOverlay(true);
 		             }
 				}
-				stopCameraControl();
+				if (isPlaying)
+					stopCameraControl();
 				break;
 			}
 			return mTouchAction != TOUCH_NONE;
@@ -501,7 +512,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 		}
 
 	private void doBrightnessTouch(float y_changed) {
-			Log.i(TAG, "RTSP y_changed = "+y_changed);
+			//Log.i(TAG, "RTSP y_changed = "+y_changed);
 			// TODO Auto-generated method stub
 			if(mIsFirstBrightnessGesture) 
 				initBrightnessTouch();
@@ -511,13 +522,13 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 			
 			WindowManager.LayoutParams lp = getWindow().getAttributes();
 		    lp.screenBrightness =  Math.min(Math.max(lp.screenBrightness + delta, 0.01f), 1);
-		    Log.i(TAG, "screen brightness = "+lp.screenBrightness);
+		    //Log.i(TAG, "screen brightness = "+lp.screenBrightness);
 		    getWindow().setAttributes(lp);
 		}  
 		
 	private void startCameraControl(float x_changed, float y_changed){
-			Log.i(TAG, "start camera control");
-		    Log.i(TAG, "x_changed = "+Math.floor(x_changed)+", y_changed = "+Math.floor(y_changed));
+			//Log.i(TAG, "start camera control");
+		    //Log.i(TAG, "x_changed = "+Math.floor(x_changed)+", y_changed = "+Math.floor(y_changed));
 		    
 		    //Enable net work control 
 		    NetControlAsyncTask netControl = new NetControlAsyncTask();
@@ -685,7 +696,12 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 
 			}
 			public DatePickerDialog dialog() {
-				mLibVLC.pause();
+				if(timer != null) {
+					timer.cancel();
+					Log.i(TAG, "timer cancel!");
+				}
+				if (mLibVLC.isPlaying())
+					mLibVLC.pause();
 				DatePickerDialog datePickerDialog = new DatePickerDialog(VideoPlayerActivity.this, new DatePickerDialog.OnDateSetListener() {
 					@Override
 					public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -709,14 +725,19 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 			}
 
 			public TimePickerDialog dialog(){
-				mLibVLC.pause();
+				if(timer != null) {
+					timer.cancel();
+					Log.i(TAG, "timer cancel!");
+				}
+				if (mLibVLC.isPlaying())
+					mLibVLC.pause();
 				TimePickerDialog timePickerDialog = new TimePickerDialog(VideoPlayerActivity.this, new TimePickerDialog.OnTimeSetListener() {
 					@Override
 					public void onTimeSet(TimePicker timePicker, int hour, int minute) {
 						mOverlaySelectedTime.setText((hour < 10 ? "0" + hour : hour) + ":" + (minute < 10 ? "0" + minute : minute));
 						float temp = ((float)hour / 24 + (float)minute/3600 )*100;
 						mOverlaySeekbar.setProgress(Math.round(temp));
-						Log.i(TAG, "mOverlaySeekbar.setProgress = " + Math.round(temp));
+						//Log.i(TAG, "mOverlaySeekbar.setProgress = " + Math.round(temp));
 					}
 				}, 12, 00, true);
 				selectTime = true;
@@ -758,8 +779,8 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	        if (mLibVLC == null)
 	            return;
 			mOverlayPlayPause.setBackgroundResource(mLibVLC.isPlaying() ? R.drawable.ic_pause_circle_big_o
-	                            : R.drawable.ic_play_circle_big_o);
-			Log.i(TAG,"mOverlayPlayPause changed");
+					: R.drawable.ic_play_circle_big_o);
+			//Log.i(TAG,"mOverlayPlayPause changed");
 	    }
 
 	/**
@@ -768,8 +789,8 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	private SeekBar.OnSeekBarChangeListener mSeekListener = new SeekBar.OnSeekBarChangeListener() {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-				Log.i(TAG, "onProgressChanged");
-				Log.i(TAG, "the progress = " + i);
+				//Log.i(TAG, "onProgressChanged");
+				//Log.i(TAG, "the progress = " + i);
 				String hourTime = (i*24/100)<10 ? "0"+Integer.toString(i * 24 / 100) : Integer.toString(i * 24 / 100);
 				int minuteTime = Math.round(((float) (i * 24) / 100) % 1 * 60);
 				String minutetime = minuteTime<10 ? "0"+Integer.toString(minuteTime) : Integer.toString(minuteTime);
@@ -778,14 +799,19 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
-				mLibVLC.pause();
-				selectTime = true;
+				if(timer != null) {
+					timer.cancel();
+					Log.i(TAG, "timer cancel!");
+				}
+				if(mLibVLC.isPlaying())
+					mLibVLC.pause();
 				Log.i(TAG,"onStartTrackingTouch");
 			}
 
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				Log.i(TAG, "onStopTrackingTouch");
+				selectTime = true;
 			}
 		};
 
@@ -797,16 +823,17 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	        public void onClick(View v) {
 	            if (mLibVLC.isPlaying())
 	            {
+					isNormalPause = true;
 	                mLibVLC.pause();
 	                mSurfaceView.setKeepScreenOn(false);
-	                Log.i(TAG, "media playing on click listener start!");
+	                Log.i(TAG, "暂停播放录像");
 	                Log.i(TAG, "mLibVLC.pause");
 	            }
 	            else
 	            {
-					if(selectTime || selectDate || isFirstRecordPlaying)
+					if(selectTime || selectDate)
 					{
-						Log.i(TAG, "ask for record file");
+						Log.i(TAG, "请求播放录像文件");
 
 						String beginTime = mOverlayDate.getText() + " " + mOverlaySelectedTime.getText()+":00";
 						String endTime;
@@ -828,11 +855,17 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 						}
 
 						//Ask for record file
-						GetRecordFileList getRecordFileList = new GetRecordFileList(getApplicationContext());
-						getRecordFileList.execute(cameraCode,beginTime,endTime);
+						final GetRecordFileList getRecordFileList = new GetRecordFileList(getApplicationContext());
+						getRecordFileList.execute(cameraCode, beginTime, endTime);
 						Log.i(TAG, "getRecordFilelist, cameraCode = " + cameraCode);
+
 						try{
-							String recordMRL = getRecordFileList.get();
+
+							if(getRecordFileList.get().length == 0)
+								return ;
+							final String[] recordMRLs = getRecordFileList.get();
+							final String recordMRL = recordMRLs[0];
+
 							Log.i(TAG, "record MRL = "+recordMRL);
 							if(recordMRL != null)
 							{
@@ -840,17 +873,31 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 
 								//设置连续播放
 								timer = new Timer();
+								Log.i(TAG, "新计时器");
 								timer.schedule(new TimerTask() {
+									int i = 0;
 									@Override
 									public void run() {
-										if(mLibVLC.isPlaying())
+										if(mLibVLC.isPlaying() || isFirstRecordPlaying)
+										{
+											isFirstRecordPlaying = false;
 											return;
-										else {
-											timer.cancel();
-//											GetRecordFileList getRecordFileList = new GetRecordFileList(getApplicationContext());
-//											getRecordFileList.execute(cameraCode, , );
+										}
+										else if(!mLibVLC.isPlaying() && !isNormalPause && i < recordMRLs.length ){
+											i++;
+											mLibVLC.playMRL(recordMRLs[i]);
+											Log.i(TAG, "i = " + i + ",自动续播，" + recordMRLs[i]);
+											Log.i(TAG, "is normal pause = "+isNormalPause);
+											try {
+												Thread.sleep(20000);
+											}catch (InterruptedException e){
+												e.printStackTrace();
+											}
 
-											Log.i(TAG, "timer cancel!");
+										}
+										else if(i >= recordMRLs.length){
+											timer.cancel();
+											Log.i(TAG, "计时器取消！");
 										}
 									}
 								}, 1000, 1000);
@@ -863,14 +910,15 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 
 						Log.i(TAG, "beginTime = "+ beginTime + "; endTime = " + endTime);
 						selectDate = false;
-						selectDate = false;
-						isFirstRecordPlaying = false;
+						selectTime = false;
+						Log.i(TAG, "selectDate = "+selectDate+", selectTime = "+selectTime+", isFirstRecordPlaying = "+isFirstRecordPlaying);
 
 					}
 					else {
 						mLibVLC.play();
+						isNormalPause = false;
 						mSurfaceView.setKeepScreenOn(true);
-						Log.i(TAG, "media playing on click listener start!");
+						Log.i(TAG, "正常播放录像");
 						Log.i(TAG, "mLibVLC.play");
 
 					}
@@ -908,6 +956,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 					showOverlay(2000000);
 					isPlaying = false;
 					isFirstRecordPlaying = true;
+					Log.i(TAG,"is first playing = "+isFirstRecordPlaying);
 //					startLoadingAnimation();
 //					playVideoRecorded();
 
@@ -1014,4 +1063,16 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 		if (!file1.exists())
 			file1.mkdirs();
 	}
+
+	private void playAtSpeed(String MRL)
+	{
+		//mLibVLC.setRate();
+		mLibVLC.playMRL(MRL);
+	}
+
+	private void playAtSpeed()
+	{
+		mLibVLC.play();
+	}
+
 }

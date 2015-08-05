@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * Created by liangxing on 2015/7/28.
  */
-public class GetRecordFileList extends AsyncTask<String, Integer, String> {
+public class GetRecordFileList extends AsyncTask<String, Integer, String[]> {
 
     private String TAG = "GetRecordFileList";
     private Context context;
@@ -49,7 +49,7 @@ public class GetRecordFileList extends AsyncTask<String, Integer, String> {
     }
 
     @Override
-    public String doInBackground(String... strings) {
+    public String[] doInBackground(String... strings) {
 
         Log.i(TAG, "doInBackground() called");
 
@@ -119,7 +119,7 @@ public class GetRecordFileList extends AsyncTask<String, Integer, String> {
 //            return envelop.bodyIn.toString();
 
         String finalResult = null;
-
+        String finalResults[] = new String[0];
 
         try {
             SoapObject resultObj = (SoapObject) envelop.getResponse();
@@ -145,11 +145,14 @@ public class GetRecordFileList extends AsyncTask<String, Integer, String> {
             }
 
             System.out.println("resultObj1数量:" + resultObj1.getPropertyCount());
+            finalResults = new String[resultObj1.getPropertyCount()];
 
             for(int   i=0; i <resultObj1.getPropertyCount()-1;i++){
 
                 SoapObject   soapChilds   =(SoapObject)resultObj1.getProperty(i);
-                String bean ="";
+//                String bean = "";
+                String bean = new String();
+                finalResults[i] = new String();
 
                 bean = soapChilds.getProperty("id") +";"+soapChilds.getProperty("cameraId")+";"+soapChilds.getProperty("deviceFullName")+";"+soapChilds.getProperty("fileName")+";"+soapChilds.getProperty("beginTime")+";"+soapChilds.getProperty("endTime")+";"+soapChilds.getProperty("filePath")+";"+soapChilds.getProperty("playUrl")+";"+soapChilds.getProperty("serviceAddress")+";"+soapChilds.getProperty("httpUrl")+";"+soapChilds.getProperty("deviceId");
                 System.out.println("bean "+i+" :"+bean);
@@ -158,35 +161,35 @@ public class GetRecordFileList extends AsyncTask<String, Integer, String> {
                 recordFileBeginTime = soapChilds.getProperty("beginTime").toString();
                 System.out.println("record file start time = " + recordFileBeginTime);
                 System.out.println("record file end time = " + recordFileEndTime);
-                //results[i] = buildHttpURL(soapChilds.getProperty("filePath").toString(),soapChilds.getProperty("fileName").toString(), soapChilds.getProperty("httpUrl").toString());
-                if(i == 0)
-                {
-                    finalResult = buildHttpURL(soapChilds.getProperty("filePath").toString(),soapChilds.getProperty("fileName").toString(), soapChilds.getProperty("httpUrl").toString());
-                }
+                finalResults[i] = buildHttpURL(soapChilds.getProperty("filePath").toString(),soapChilds.getProperty("fileName").toString(), soapChilds.getProperty("httpUrl").toString());
+//                if(i == 0)
+//                {
+//                    finalResult = buildHttpURL(soapChilds.getProperty("filePath").toString(),soapChilds.getProperty("fileName").toString(), soapChilds.getProperty("httpUrl").toString());
+//                }
             }
 
         }catch (SoapFault soapFault){
             soapFault.printStackTrace();
         }
 
-        Log.i(TAG, "final result = " + finalResult);
-        return finalResult;
+        return finalResults;
+//        Log.i(TAG, "final result = " + finalResult);
+//        return finalResult;
 
         //Log.i(TAG, "final result = "+finalResult);
-
 
     }
 
     @Override
-    public void onPostExecute(String finalResult) {
-        super.onPostExecute(finalResult);
+    public void onPostExecute(String[] finalResults) {
+        super.onPostExecute(finalResults);
 
-        if(finalResult == null)
+        if(finalResults[0] == null)
         {
             Toast.makeText(context, "该时间没有录像，请重新查询！", Toast.LENGTH_LONG).show();
         }
-        if(finalResult != null){
-            Toast.makeText(context, finalResult.toString(), Toast.LENGTH_LONG).show();
+        if(finalResults[0] != null){
+            Toast.makeText(context, finalResults[0].toString(), Toast.LENGTH_LONG).show();
         }
     }
 
