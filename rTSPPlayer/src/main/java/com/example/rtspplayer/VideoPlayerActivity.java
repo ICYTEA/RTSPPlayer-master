@@ -1,7 +1,6 @@
 package com.example.rtspplayer;
 
 import java.io.File;
-import java.security.PrivateKey;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,7 +18,6 @@ import org.videolan.libvlc.WeakHandler;
 
 import com.example.net.GetRecordFileList;
 import com.example.net.NetControlAsyncTask;
-import com.example.net.StartRealTimePlayerAsyncTask;
 import com.example.net.StopRealTimePlayerAsyncTask;
 
 import android.annotation.TargetApi;
@@ -31,8 +29,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
-import android.media.Image;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -77,13 +73,14 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	private ImageView mOverlayLoading;
 	private TextView mOverlayLoadingText;
 	private boolean mShowing = false;
+	private Message msg;
 
 	/*Controlling Overlay View*/
 	private View mOverlayHeader;
 	private View mOverlayProgress;
-	private TextView mOverlayTitle;
-	private TextView mOverlayBattery;
-	private TextView mOverlaySystime;
+	private ImageButton mOverlayBack;
+	private TextView mOverlayCameraName;
+	private TextView mOverlayIsVideoPlaying;
 	private ImageButton mOverlayPlayPause;
 	private ImageButton mOverlayScreenShot;
 	private ImageButton mOverlayRecord;
@@ -106,7 +103,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	private Calendar calendar;
 
 	private boolean recording = false;
-	private boolean isPlaying = false;
+	private boolean isPlaying = true;
 	private boolean selectDate = true;
 	private boolean selectTime = true;
 	private boolean isFirstRecordPlaying = false;
@@ -139,6 +136,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
     private static final int SURFACE_ORIGINAL = 6;    
     private int mCurrentSize = SURFACE_BEST_FIT;
     private static final int FADE_OUT = 1;
+	private static final int LOADING = 7;
     
 	/* Tips view */
 	private int mSurfaceYDisplayRange;
@@ -150,7 +148,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
     private static final int TOUCH_VOLUME = 1;
     private static final int TOUCH_BRIGHTNESS = 2;
     private static final int TOUCH_SEEK = 3;
-    private static final int OVERLAY_TIMEOUT = 4000;
+    private static final int OVERLAY_TIMEOUT = 6000;
     private boolean mIsFirstBrightnessGesture = true;
 
 	private Timer timer;
@@ -190,9 +188,11 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 
 		//Initial Option Overlay View
 		mOverlayHeader = (View)findViewById(R.id.player_overlay_header);
-		mOverlayTitle = (TextView)findViewById(R.id.player_overlay_title);
-		mOverlayBattery = (TextView)findViewById(R.id.player_overlay_battery);
-		mOverlaySystime = (TextView)findViewById(R.id.player_overlay_systime);
+		mOverlayBack = (ImageButton)findViewById(R.id.player_overlay_back);
+		mOverlayBack.setOnClickListener(mOverlayBackListener);
+
+		mOverlayCameraName = (TextView)findViewById(R.id.player_overlay_cameraName);
+		mOverlayIsVideoPlaying = (TextView)findViewById(R.id.player_overlay_isVedioPlaying);
 		mOverlayScreenShot = (ImageButton)findViewById(R.id.player_overlay_size);
 		mOverlayScreenShot.setOnClickListener(mScreenShotListener);
 		mOverlayRecord = (ImageButton) findViewById(R.id.player_overlay_record);
@@ -227,7 +227,12 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 		//Loading Animation
 		mOverlayLoading = (ImageView)findViewById(R.id.player_overlay_loading);
 		mOverlayLoadingText = (TextView)findViewById(R.id.player_overlay_loading_text);
-		startLoadingAnimation();
+
+		//replace startloadinganimation() by sending message to handler
+		msg = mHandler.obtainMessage(LOADING);
+		mHandler.removeMessages(LOADING);
+		mHandler.sendMessageDelayed(msg, 0);
+//		startLoadingAnimation();
 
 		//Event Handler listen to view changes
 	    EventHandler em = EventHandler.getInstance();  
@@ -427,12 +432,18 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	        @Override
 	        public void handleMessage(Message msg) {
 	            switch (msg.what) {
-	            case SURFACE_SIZE:
-	                changeSurfaceSize();
-	                break;
-	            case FADE_OUT:
-	            	hideOverlay(false);
-	                break;
+					case LOADING:
+						startLoadingAnimation();
+						mOverlayPlayPause.setVisibility(View.INVISIBLE);
+						break;
+	            	case SURFACE_SIZE:
+	                	changeSurfaceSize();
+	                	break;
+					case FADE_OUT:
+	            		hideOverlay(false);
+	                	break;
+					default:
+						break;
 	            }
 	        }
 	  };
@@ -468,8 +479,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 				//Log.i(TAG, "MotionEvent = Move");
 				// No volume/brightness action if coef < 2 
 				
-					//doBrightnessTouch(y_changed);
-				if(isPlaying)
+				if(isPlaying && (coef > 3 || coef < 0.66) )
 					startCameraControl(x_changed, y_changed);
 				
 				break;
@@ -477,7 +487,7 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 			case MotionEvent.ACTION_UP:
 				//Log.i(TAG, "MotionEvent = Up");
 				
-				if(mTouchAction == TOUCH_NONE && !isPlaying){
+				if(mTouchAction == TOUCH_NONE){
 		             if (!mShowing) {
 		                 showOverlay();
 		             } else {
@@ -679,9 +689,8 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	             mOverlayHeader.setVisibility(View.INVISIBLE);
 	             mOverlayPlayPause.setVisibility(View.INVISIBLE);
 				 mOverlayProgress.setVisibility(View.INVISIBLE);
-	             mShowing = false;
-
-	         }
+				 mShowing = false;
+			 }
 	     }
 
 	/**
@@ -772,6 +781,23 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 		}
 	};
 
+	private OnClickListener mOverlayBackListener = new OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			if(isPlaying)
+				VideoPlayerActivity.this.finish();
+			else {
+				isPlaying = true;
+				setPlayingModeText(isPlaying);
+
+				msg = mHandler.obtainMessage(LOADING);
+				mHandler.removeMessages(LOADING);
+				mHandler.sendMessageDelayed(msg, 0);
+				mLibVLC.playMRL(MRL);
+			}
+		}
+	};
+
 	/**
 	 * update Overlay
 	 */
@@ -831,9 +857,10 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 	            }
 	            else
 	            {
-					if(selectTime || selectDate)
+					if((selectTime || selectDate) && !isPlaying)
 					{
 						Log.i(TAG, "请求播放录像文件");
+						Log.i(TAG, "isPlaying = "+isPlaying);
 
 						String beginTime = mOverlayDate.getText() + " " + mOverlaySelectedTime.getText()+":00";
 						String endTime;
@@ -861,15 +888,21 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 
 						try{
 
-							if(getRecordFileList.get().length == 0)
+							if(getRecordFileList.get()[0] == null)
 								return ;
 							final String[] recordMRLs = getRecordFileList.get();
-							final String recordMRL = recordMRLs[0];
+							Log.i(TAG, "record MRL length =" +recordMRLs.length);
 
-							Log.i(TAG, "record MRL = "+recordMRL);
-							if(recordMRL != null)
-							{
-								mLibVLC.playMRL(recordMRL);
+							final String recordMRL = recordMRLs[0];
+							if(recordMRL.substring(0,9) == "SoapFault"){
+								mOverlayBack.callOnClick();
+							}
+							else if(recordMRL != null ) {
+								playAtSpeed(recordMRL);
+
+								msg = mHandler.obtainMessage(LOADING);
+								mHandler.removeMessages(LOADING);
+								mHandler.sendMessageDelayed(msg, 0);
 
 								//设置连续播放
 								timer = new Timer();
@@ -883,9 +916,15 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 											isFirstRecordPlaying = false;
 											return;
 										}
-										else if(!mLibVLC.isPlaying() && !isNormalPause && i < recordMRLs.length ){
+										else if(!mLibVLC.isPlaying() && !isNormalPause && i < ( recordMRLs.length - 2) ){
 											i++;
-											mLibVLC.playMRL(recordMRLs[i]);
+//											mLibVLC.playMRL(recordMRLs[i]);
+											playAtSpeed(recordMRLs[i]);
+
+											msg = mHandler.obtainMessage(LOADING);
+											mHandler.removeMessages(LOADING);
+											mHandler.sendMessageDelayed(msg, 0);
+//											startLoadingAnimation();
 											Log.i(TAG, "i = " + i + ",自动续播，" + recordMRLs[i]);
 											Log.i(TAG, "is normal pause = "+isNormalPause);
 											try {
@@ -893,11 +932,11 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 											}catch (InterruptedException e){
 												e.printStackTrace();
 											}
-
 										}
-										else if(i >= recordMRLs.length){
+										else if(i == recordMRLs.length - 2 && i > 0){
 											timer.cancel();
 											Log.i(TAG, "计时器取消！");
+											Toast.makeText(getApplicationContext(),"录像文件播放完毕", Toast.LENGTH_SHORT).show();
 										}
 									}
 								}, 1000, 1000);
@@ -915,7 +954,8 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 
 					}
 					else {
-						mLibVLC.play();
+						playAtSpeed();
+//						mLibVLC.play();
 						isNormalPause = false;
 						mSurfaceView.setKeepScreenOn(true);
 						Log.i(TAG, "正常播放录像");
@@ -952,18 +992,25 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 			public void onClick(View view) {
 				//Toast.makeText(getApplicationContext(), "more listener", 1000).show();
 				if(isPlaying) {
-					mLibVLC.stop();
-					showOverlay(2000000);
 					isPlaying = false;
+					setPlayingModeText(isPlaying);
+					if(mLibVLC != null)
+						mLibVLC.stop();
+					showOverlay(2000000);
 					isFirstRecordPlaying = true;
-					Log.i(TAG,"is first playing = "+isFirstRecordPlaying);
+					Log.i(TAG, "is first playing = " + isFirstRecordPlaying);
+					mOverlaySpeed.setText("1x");
+
+//					msg = mHandler.obtainMessage(LOADING);
+//					mHandler.removeMessages(LOADING);
+//					mHandler.sendMessageDelayed(msg, 0);
 //					startLoadingAnimation();
 //					playVideoRecorded();
-
 				}
 				else {
-					mLibVLC.playMRL(MRL);
-					isPlaying = true;
+					mOverlayBack.callOnClick();
+//					mLibVLC.playMRL(MRL);
+//					isPlaying = true;
 				}
 
 			}
@@ -1064,15 +1111,32 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 			file1.mkdirs();
 	}
 
-	private void playAtSpeed(String MRL)
-	{
-		//mLibVLC.setRate();
+	private void playAtSpeed(String MRL) {
+		String speed = mOverlaySpeed.getText().toString();
+		int speedInt = Integer.parseInt(speed.substring(0, 1));
+		Log.i(TAG, "play at speed "+speedInt);
+		mLibVLC.setRate(speedInt);
 		mLibVLC.playMRL(MRL);
 	}
 
-	private void playAtSpeed()
-	{
+	private void playAtSpeed() {
+		String speed = mOverlaySpeed.getText().toString();
+		int speedInt = Integer.parseInt(speed.substring(0, 1));
+		mLibVLC.setRate(speedInt);
+		Log.i(TAG, "play at speed "+speedInt);
 		mLibVLC.play();
 	}
 
+	private void setPlayingModeText(boolean isPlaying)
+	{
+		if(isPlaying) {
+			mOverlayIsVideoPlaying.setText("视频直播");
+			mOverlaySelectedTime.setText("00:00");
+			mOverlayDate.setText(year+"-"+month+"-"+day);
+			mOverlaySeekbar.setProgress(0);
+			mOverlayProgress.setClickable(false);
+		}
+		else
+			mOverlayIsVideoPlaying.setText("视频录像");
+	}
 }

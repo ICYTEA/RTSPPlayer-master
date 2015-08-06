@@ -43,6 +43,8 @@ public class GetRecordFileList extends AsyncTask<String, Integer, String[]> {
     private String recordFileBeginTime;
     private String recordFileEndTime;
 
+    private String[] finalResults;
+
     public GetRecordFileList (Context con)
     {
         this.context = con;
@@ -113,13 +115,14 @@ public class GetRecordFileList extends AsyncTask<String, Integer, String[]> {
             e.printStackTrace();
         }
 
-//        // 服务器返回错误信息
-//        String temp = envelop.bodyIn.toString().substring(0, 9);
-//        if(temp.equals("SoapFault"))
-//            return envelop.bodyIn.toString();
-
-        String finalResult = null;
-        String finalResults[] = new String[0];
+        // 服务器返回错误信息
+        String temp = envelop.bodyIn.toString().substring(0, 9);
+        if(temp.equals("SoapFault"))
+        {
+            finalResults = new String[1];
+            finalResults[0] = envelop.bodyIn.toString();
+            return finalResults;
+        }
 
         try {
             SoapObject resultObj = (SoapObject) envelop.getResponse();
@@ -135,19 +138,18 @@ public class GetRecordFileList extends AsyncTask<String, Integer, String[]> {
 
             SoapObject resultObj1 = (SoapObject)resultObj.getProperty("list");
 
-
             try {
                 System.out.println("recordType:"+ resultObj1.getProperty("recordType"));
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 System.out.println("recordType异常：" + e.getMessage());
-
             }
 
-            System.out.println("resultObj1数量:" + resultObj1.getPropertyCount());
+            System.out.println("resultList数量:" + resultObj1.getPropertyCount());
+
             finalResults = new String[resultObj1.getPropertyCount()];
 
-            for(int   i=0; i <resultObj1.getPropertyCount()-1;i++){
+            for(int  i=0; i <(resultObj1.getPropertyCount()-1); i++){
 
                 SoapObject   soapChilds   =(SoapObject)resultObj1.getProperty(i);
 //                String bean = "";
@@ -175,9 +177,6 @@ public class GetRecordFileList extends AsyncTask<String, Integer, String[]> {
         return finalResults;
 //        Log.i(TAG, "final result = " + finalResult);
 //        return finalResult;
-
-        //Log.i(TAG, "final result = "+finalResult);
-
     }
 
     @Override
