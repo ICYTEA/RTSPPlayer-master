@@ -746,7 +746,6 @@ public class VideoPlayerActivity extends Activity implements Callback, IVideoPla
 						mOverlaySelectedTime.setText((hour < 10 ? "0" + hour : hour) + ":" + (minute < 10 ? "0" + minute : minute));
 						float temp = ((float)hour / 24 + (float)minute/3600 )*100;
 						mOverlaySeekbar.setProgress(Math.round(temp));
-						//Log.i(TAG, "mOverlaySeekbar.setProgress = " + Math.round(temp));
 					}
 				}, 12, 00, true);
 				selectTime = true;
